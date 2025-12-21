@@ -1,5 +1,5 @@
 import "./Navbar.css";
-import Button from "../button/Button";
+import Button from "../../button/Button";
 
 export default function Navbar() {
   return (
