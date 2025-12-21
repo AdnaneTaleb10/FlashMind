@@ -1,0 +1,36 @@
+.navbar{
+    background-color: #3A86FF;
+    padding: 1rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.navbar-brand{
+    color: white;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.navbar-actions{
+    display: flex;
+    gap: 1rem;
+}
+
+.sign-in{
+    padding: 0.5rem 1rem;
+    background-color: white;
+    color: #000;
+}
+
+.sign-in:hover{
+    background-color: #f0f0f0;
+}
+
+.sign-up{
+    padding: 0.5rem 1rem;
+}
+
+.sign-up:hover{
+    background-color: transparent;
+}
