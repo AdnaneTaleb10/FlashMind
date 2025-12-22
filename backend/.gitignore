@@ -32,3 +32,19 @@ build/
 
 ### VS Code ###
 .vscode/
+
+# Environment variables - DO NOT COMMIT
+.env
+*.env
+!.env.example
+
+# Maven
+target/
+
+# IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+
+# Logs
+*.log
