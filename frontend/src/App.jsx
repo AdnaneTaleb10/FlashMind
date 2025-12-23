@@ -1,13 +1,9 @@
-import React from 'react'
-import './App.css'
+import React from 'react';
+import Dashboard from './pages/Dashboard'; // Vérifie ce chemin !
+import './index.css'; // Si tu as des styles globaux
 
 function App() {
-
-
-  return (
-    <>
-    </>
-  )
+  return <Dashboard />;
 }
 
-export default App
+export default App;
