@@ -1,59 +1,81 @@
-import React from 'react';
-import './Dashboard.css';
+// Mettez à jour votre Dashboard.jsx pour utiliser des liens
+import "./Dashboard.css";
+import { useNavigate } from 'react-router-dom';
 
-const Dashboard = () => {
+export default function Dashboard() {
+  const navigate = useNavigate();
+  
+  const flashcards = 42;
+  const folders = [
+    { name: "Computer Science", cards: 12 },
+    { name: "Math", cards: 15 },
+  ];
+
+  const sessions = [
+    { subject: "French", score: 85, time: "1 hour ago", color: "green" },
+    { subject: "Math", score: 65, time: "3 hours ago", color: "yellow" },
+    { subject: "Computer Science", score: 45, time: "18 hours ago", color: "red" },
+  ];
+
   return (
     <div className="dashboard">
-      {/* Header */}
-      <header className="dashboard-header">
-        <h1>Welcome to FlashMind Dashboard</h1>
+      {/* Top bar */}
+      <header className="top-bar">
+        <h1>FLASH MIND</h1>
+        <div className="user-icon">👤</div>
       </header>
 
-      {/* Sidebar */}
-      <aside className="dashboard-sidebar">
-        <ul>
-          <li>Home</li>
-          <li>Flashcards</li>
-          <li>Statistics</li>
-          <li>Settings</li>
-        </ul>
-      </aside>
+      <div className="container">
+        <h2>Your Space</h2>
 
-      {/* Main content */}
-      <main className="dashboard-content">
-        <section className="dashboard-widgets">
-          <div className="widget">Widget 1</div>
-          <div className="widget">Widget 2</div>
-          <div className="widget">Widget 3</div>
-        </section>
+        {/* Stats */}
+        <div className="stats">
+          <div className="stat-card">
+            <span>{flashcards}</span>
+            <p>Flashcards</p>
+          </div>
 
-        <section className="dashboard-tables">
-          <h2>Recent Activities</h2>
-          <table>
-            <thead>
-              <tr>
-                <th>User</th>
-                <th>Action</th>
-                <th>Date</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>John</td>
-                <td>Created Flashcard</td>
-                <td>2025-12-23</td>
-              </tr>
-              <tr>
-                <td>Aya</td>
-                <td>Reviewed Flashcard</td>
-                <td>2025-12-22</td>
-              </tr>
-            </tbody>
-          </table>
-        </section>
-      </main>
+          <div className="stat-card">
+            <span>{folders.length}</span>
+            <p>Folders</p>
+          </div>
+        </div>
+
+        {/* Folders */}
+        <div className="box">
+          <h3>Your Folders</h3>
+          {folders.map((f, i) => (
+            <div className="folder-row" key={i}>
+              <div>
+                📁 {f.name} <span>{f.cards} Cards</span>
+              </div>
+              <div className="actions">
+                <button onClick={() => navigate('/study-question')}>Study</button>
+                <button>Edit</button>
+                <button className="danger">Delete</button>
+              </div>
+            </div>
+          ))}
+          <div className="footer">
+            <button>Show Folders</button>
+            <button onClick={() => navigate('/create-folder')}>Create Folder</button>
+          </div>
+        </div>
+
+        {/* History */}
+        <div className="box">
+          <h3>Recent Study Sessions</h3>
+          {sessions.map((s, i) => (
+            <div className="session-row" key={i}>
+              <span className={`dot ${s.color}`}></span>
+              <span>{s.subject}</span>
+              <span>{s.score}%</span>
+              <span>{s.time}</span>
+            </div>
+          ))}
+          <button className="center">Show History</button>
+        </div>
+      </div>
     </div>
   );
-};
-
-export default Dashboard;
+}

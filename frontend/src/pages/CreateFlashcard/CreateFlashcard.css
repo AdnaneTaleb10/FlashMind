@@ -1,0 +1,126 @@
+/* src/pages/CreateFlashcard/CreateFlashcard.css */
+.create-flashcard-page {
+  min-height: 100vh;
+  background-color: #f9fafb;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+}
+
+.create-flashcard-container {
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+  width: 90%;
+  max-width: 500px;
+}
+
+.create-flashcard-header {
+  padding: 1.5rem 1.5rem 0.5rem 1.5rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.create-flashcard-header h2 {
+  margin: 0;
+  color: #111827;
+  font-size: 1.5rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+.flashcard-form {
+  padding: 1.5rem;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #374151;
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+
+.form-textarea {
+  width: 100%;
+  padding: 0.75rem;
+  border: 2px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-family: inherit;
+  resize: vertical;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  background-color: #f9fafb;
+}
+
+.form-textarea:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  background-color: white;
+}
+
+.form-textarea::placeholder {
+  color: #9ca3af;
+}
+
+.form-textarea.error {
+  border-color: #ef4444;
+}
+
+.form-textarea.error:focus {
+  border-color: #ef4444;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+.error-message {
+  display: block;
+  margin-top: 0.5rem;
+  color: #ef4444;
+  font-size: 0.875rem;
+}
+
+.create-flashcard-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+.btn-cancel,
+.btn-create {
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: none;
+}
+
+.btn-cancel {
+  background-color: #f3f4f6;
+  color: #374151;
+}
+
+.btn-cancel:hover {
+  background-color: #e5e7eb;
+}
+
+.btn-create {
+  background-color: #3b82f6;
+  color: white;
+}
+
+.btn-create:hover {
+  background-color: #2563eb;
+}
+
+.btn-create:active {
+  transform: translateY(1px);
+}
