@@ -68,29 +68,36 @@ public class UserService {
         return userDao.findAll();
     }
 
-    // Update user profile
     public User updateUserProfile(Integer userId, User updatedUser) {
         // Check if user exists
         User existingUser = getUserById(userId);
 
-        // Validate email if changed
-        if (!existingUser.getEmail().equals(updatedUser.getEmail())) {
-            if (userDao.existsByEmail(updatedUser.getEmail())) {
-                throw new IllegalArgumentException("Email already in use");
+        // Only update email if provided
+        if (updatedUser.getEmail() != null && !updatedUser.getEmail().isEmpty()) {
+            // Check if email is changing
+            if (!existingUser.getEmail().equals(updatedUser.getEmail())) {
+                if (userDao.existsByEmail(updatedUser.getEmail())) {
+                    throw new IllegalArgumentException("Email already in use");
+                }
+                existingUser.setEmail(updatedUser.getEmail());
             }
         }
 
-        // Validate username if changed
-        if (!existingUser.getUsername().equals(updatedUser.getUsername())) {
-            if (userDao.existsByUsername(updatedUser.getUsername())) {
-                throw new IllegalArgumentException("Username already taken");
+        // Only update username if provided
+        if (updatedUser.getUsername() != null && !updatedUser.getUsername().isEmpty()) {
+            // Check if username is changing
+            if (!existingUser.getUsername().equals(updatedUser.getUsername())) {
+                if (userDao.existsByUsername(updatedUser.getUsername())) {
+                    throw new IllegalArgumentException("Username already taken");
+                }
+                existingUser.setUsername(updatedUser.getUsername());
             }
         }
 
-        // Update fields
-        existingUser.setEmail(updatedUser.getEmail());
-        existingUser.setName(updatedUser.getName());
-        existingUser.setUsername(updatedUser.getUsername());
+        // Only update name if provided
+        if (updatedUser.getName() != null && !updatedUser.getName().isEmpty()) {
+            existingUser.setName(updatedUser.getName());
+        }
 
         userDao.updateUser(existingUser);
 

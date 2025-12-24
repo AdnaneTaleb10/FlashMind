@@ -34,8 +34,16 @@ public class UserDao {
 
     // Create a new user
     public int createUser(User user) {
-        String sql = "INSERT INTO users (email, name, username, password, created_at) VALUES (?, ?, ?, ?, now())";
-        return jdbcTemplate.update(sql, user.getEmail(), user.getName(), user.getUsername(), user.getPassword());
+        String sql = "INSERT INTO users (email, name, username, password, created_at) VALUES (?, ?, ?, ?, now()) RETURNING id";
+
+        Integer id = jdbcTemplate.queryForObject(sql, Integer.class,
+                user.getEmail(), user.getName(), user.getUsername(), user.getPassword());
+
+        if (id != null) {
+            user.setId(id);
+        }
+
+        return 1;
     }
 
     // Find user by ID
