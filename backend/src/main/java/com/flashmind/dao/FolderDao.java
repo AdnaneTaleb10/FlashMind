@@ -4,10 +4,14 @@ import com.flashmind.model.Folder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,10 +35,26 @@ public class FolderDao {
         }
     };
 
-    // Create a new folder
-    public int createFolder(Folder folder) {
+    // Create a new folder - NOW RETURNS THE FOLDER WITH GENERATED ID
+// Create a new folder - Returns the folder with generated ID
+    public Folder createFolder(Folder folder) {
         String sql = "INSERT INTO folders (user_id, folder_name, created_at, total_cards) VALUES (?, ?, now(), 0)";
-        return jdbcTemplate.update(sql, folder.getUserId(), folder.getFolderName());
+
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+
+        jdbcTemplate.update(connection -> {
+            PreparedStatement ps = connection.prepareStatement(sql, new String[]{"id"}); // ✅ Only return "id" column
+            ps.setInt(1, folder.getUserId());
+            ps.setString(2, folder.getFolderName());
+            return ps;
+        }, keyHolder);
+
+        // Get the generated ID
+        Integer generatedId = keyHolder.getKey().intValue();
+
+        // Fetch and return the complete folder with all fields (including createdAt)
+        return findById(generatedId).orElseThrow(() ->
+                new RuntimeException("Failed to retrieve created folder"));
     }
 
     // Find folder by ID
@@ -60,10 +80,14 @@ public class FolderDao {
         return jdbcTemplate.query(sql, folderRowMapper);
     }
 
-    // Update folder
-    public int updateFolder(Folder folder) {
+    // Update folder - NOW RETURNS THE UPDATED FOLDER
+    public Folder updateFolder(Folder folder) {
         String sql = "UPDATE folders SET folder_name = ? WHERE id = ?";
-        return jdbcTemplate.update(sql, folder.getFolderName(), folder.getId());
+        jdbcTemplate.update(sql, folder.getFolderName(), folder.getId());
+
+        // Return the updated folder
+        return findById(folder.getId()).orElseThrow(() ->
+                new RuntimeException("Failed to retrieve updated folder"));
     }
 
     // Delete folder by ID

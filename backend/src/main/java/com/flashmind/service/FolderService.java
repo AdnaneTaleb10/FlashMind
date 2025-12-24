@@ -34,9 +34,9 @@ public class FolderService {
         }
 
         // Create folder
-        folderDao.createFolder(folder);
+        Folder savedFolder = folderDao.createFolder(folder);
 
-        return folder;
+        return savedFolder;
     }
 
     // Get folder by ID

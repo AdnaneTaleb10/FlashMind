@@ -4,8 +4,11 @@ import com.flashmind.model.FlashCard;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
@@ -32,11 +35,24 @@ public class FlashCardDao {
     };
 
     // Create a new flash card
-    public int createFlashCard(FlashCard flashCard) {
+    public FlashCard createFlashCard(FlashCard flashCard) {
         String sql = "INSERT INTO flash_cards (folder_id, front_text, back_text, created_at) VALUES (?, ?, ?, now())";
-        return jdbcTemplate.update(sql, flashCard.getFolderId(), flashCard.getFrontText(), flashCard.getBackText());
-    }
 
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+
+        jdbcTemplate.update(connection -> {
+            PreparedStatement ps = connection.prepareStatement(sql, new String[]{"id"});
+            ps.setInt(1, flashCard.getFolderId());
+            ps.setString(2, flashCard.getFrontText());
+            ps.setString(3, flashCard.getBackText());
+            return ps;
+        }, keyHolder);
+
+        Integer generatedId = keyHolder.getKey().intValue();
+
+        return findById(generatedId).orElseThrow(() ->
+                new RuntimeException("Failed to retrieve created flashcard"));
+    }
     // Find flash card by ID
     public Optional<FlashCard> findById(Integer id) {
         String sql = "SELECT * FROM flash_cards WHERE id = ?";
