@@ -1,121 +1,198 @@
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: #f5f8fc;
-}
-
 .dashboard {
-  min-height: 100vh;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  max-width: 800px;
+  margin: 0 auto;
 }
 
-/* Top bar */
-.top-bar {
-  background: #5aa9f8;
-  color: white;
-  padding: 20px 40px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-/* Main container */
-.container {
-  background: white;
-  margin: 30px auto;
-  padding: 40px;
-  width: 80%;
-  border-radius: 20px;
-}
-
-h2 {
+.dashboard h1 {
   text-align: center;
+  font-size: 28px;
+  margin-bottom: 10px;
+  color: #333;
 }
 
-/* Stats */
+.dashboard h2 {
+  text-align: center;
+  font-size: 22px;
+  margin-bottom: 30px;
+  color: #555;
+}
+
 .stats {
   display: flex;
   justify-content: center;
   gap: 40px;
-  margin: 30px 0;
+  margin-bottom: 40px;
 }
 
-.stat-card {
-  border: 2px solid #5aa9f8;
-  padding: 20px 50px;
-  border-radius: 12px;
+.stat-item {
   text-align: center;
-  color: #5aa9f8;
-  font-size: 22px;
-}
-
-/* Boxes */
-.box {
-  border: 2px solid #5aa9f8;
-  border-radius: 15px;
   padding: 20px;
-  margin-top: 30px;
-}
-
-/* Folder rows */
-.folder-row,
-.session-row {
-  display: flex;
-  justify-content: space-between;
-  padding: 12px 0;
-  align-items: center;
-}
-
-.actions button {
-  margin-left: 10px;
-  background: #5aa9f8;
-  color: white;
-  border: none;
-  padding: 6px 14px;
-  border-radius: 8px;
-  cursor: pointer;
-}
-
-.actions .danger {
-  background: #ff4d4d;
-}
-
-/* Footer buttons */
-.footer {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 15px;
-}
-
-.footer button,
-.center {
-  background: #5aa9f8;
-  color: white;
-  border: none;
-  padding: 8px 20px;
+  border: 2px solid #4a90e2;
   border-radius: 10px;
+  min-width: 150px;
 }
 
-/* Sessions */
-.dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  display: inline-block;
+.stat-number {
+  font-size: 36px;
+  font-weight: bold;
+  color: #4a90e2;
+  margin-bottom: 5px;
 }
 
-.green { background: #3cff00; }
-.yellow { background: #ffd400; }
-.red { background: #ff2c2c; }
-
-button {
-  transition: 0.2s ease;
+.stat-label {
+  font-size: 16px;
+  color: #666;
 }
 
-button:hover {
-  transform: scale(1.05);
-  opacity: 0.9;
+.folders-section,
+.sessions-section {
+  border: 2px solid #4a90e2;
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 30px;
 }
 
-button:active {
-  transform: scale(0.95);
+.folders-section h3,
+.sessions-section h3 {
+  font-size: 18px;
+  color: #333;
+  margin-bottom: 20px;
+  padding-left: 10px;
+  border-left: 4px solid #4a90e2;
+}
+
+.folder-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 10px;
+  border-bottom: 1px solid #eee;
+}
+
+.folder-item:last-child {
+  border-bottom: none;
+}
+
+.folder-left {
+  display: flex;
+  flex-direction: column;
+}
+
+.folder-name {
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 5px;
+}
+
+.card-count {
+  background-color: #f5f5f5;
+  color: #666;
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-size: 14px;
+  width: fit-content;
+}
+
+.folder-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.folder-actions button {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  background-color: #4a90e2;
+  color: white;
+  transition: background-color 0.3s;
+}
+
+.folder-actions button:hover {
+  background-color: #357ae8;
+}
+
+.folder-actions .delete-btn {
+  background-color: #e74c3c;
+}
+
+.folder-actions .delete-btn:hover {
+  background-color: #c0392b;
+}
+
+.folder-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid #eee;
+}
+
+.folder-buttons button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: #4a90e2;
+  color: white;
+  font-size: 15px;
+}
+
+.folder-buttons button:hover {
+  background-color: #357ae8;
+}
+
+.session-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 10px;
+  border-bottom: 1px solid #eee;
+}
+
+.session-item:last-child {
+  border-bottom: none;
+}
+
+.session-name {
+  flex: 1;
+  color: #333;
+}
+
+.session-percentage {
+  width: 60px;
+  text-align: center;
+  font-weight: bold;
+  color: #4a90e2;
+}
+
+.session-time {
+  width: 100px;
+  text-align: right;
+  color: #888;
+  font-size: 14px;
+}
+
+.show-history-btn {
+  display: block;
+  margin: 20px auto 0;
+  padding: 10px 30px;
+  background-color: #4a90e2;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 15px;
+}
+
+.show-history-btn:hover {
+  background-color: #357ae8;
+}
+
+.folder-item.selected {
+  background-color: #f0f8ff;
+  border-color: #4a90e2;
 }

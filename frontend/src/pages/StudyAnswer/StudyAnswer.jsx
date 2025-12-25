@@ -1,29 +1,58 @@
-// src/pages/StudyAnswer/StudyAnswer.jsx
 import './StudyAnswer.css';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 function StudyAnswer() {
-  return (
-    <div className="study-screen">
-      <div className="header">
-        <h1>FLASH MIND</h1>
-        <div className="subtitle">Studying French</div>
-      </div>
+  const navigate = useNavigate();
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const subject = searchParams.get('subject') || 'French';
 
-      <div className="card">
-        <div className="card-content">
-          <div className="answer">
-            "Bonjour" means "Good Morning"
+  const handleNextCard = () => {
+    navigate(`/study-question?subject=${subject}`);
+  };
+
+  const handleCorrect = () => {
+    // Logique pour marquer comme correct
+    navigate(`/study-question?subject=${subject}`);
+  };
+
+  const handleWrong = () => {
+    // Logique pour marquer comme incorrect
+    navigate(`/study-question?subject=${subject}`);
+  };
+
+  const handleBack = () => {
+    navigate('/dashboard');
+  };
+
+  return (
+    <div className="study-answer">
+      <header className="study-header">
+        <button className="back-button" onClick={handleBack}>×</button>
+        <h1>FLASH MIND</h1>
+        <div className="subject-info">Studying {subject}</div>
+      </header>
+
+      <main className="answer-content">
+        <div className="answer-box">
+          "Bonjour" means "Good Morning"
+        </div>
+        
+        <div className="answer-actions">
+          <button className="next-card-button" onClick={handleNextCard}>
+            Next Card
+          </button>
+          
+          <div className="feedback-buttons">
+            <button className="correct-button" onClick={handleCorrect}>
+              Correct
+            </button>
+            <button className="wrong-button" onClick={handleWrong}>
+              Wrong X
+            </button>
           </div>
         </div>
-      </div>
-
-      <div className="footer">
-        <button className="next-card-btn">Next Card</button>
-        <div className="feedback-buttons">
-          <button className="correct-btn">Correct ✔</button>
-          <button className="wrong-btn">Wrong ✘</button>
-        </div>
-      </div>
+      </main>
     </div>
   );
 }
