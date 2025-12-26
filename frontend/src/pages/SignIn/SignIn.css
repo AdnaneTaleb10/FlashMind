@@ -1,3 +1,10 @@
+/* Import de la police Montserrat */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
+
+/* Appliquer Montserrat à tous les éléments de la page SignIn */
+body, html, #root, .login-container-login, .login-container-login * {
+    font-family: 'Montserrat', sans-serif;
+}
 .login-container-login {
   display: flex;
   width: 100%;
