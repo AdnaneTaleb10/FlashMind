@@ -2,6 +2,13 @@ package com.flashmind.controller;
 
 import com.flashmind.model.Folder;
 import com.flashmind.service.FolderService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,20 +22,23 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/folders")
 @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
+@Tag(name = "Folders", description = "Folder management API - Create, read, update, and delete flashcard folders")
 public class FolderController {
 
     @Autowired
     private FolderService folderService;
 
-    /**
-     * Get all folders for the authenticated user
-     * GET /api/folders
-     * Response: [{"id": 1, "name": "...", "totalCards": 5, "createdAt": "..."}]
-     */
+    @Operation(
+            summary = "Get all folders",
+            description = "Retrieve all folders belonging to the authenticated user, ordered by creation date (newest first)"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully retrieved folders"),
+            @ApiResponse(responseCode = "401", description = "User not authenticated")
+    })
     @GetMapping
     public ResponseEntity<?> getUserFolders(HttpSession session) {
         try {
-            // Get userId from session
             Integer userId = (Integer) session.getAttribute("userId");
 
             if (userId == null) {
@@ -37,9 +47,7 @@ public class FolderController {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
             }
 
-            // Get all user's folders
             List<Folder> folders = folderService.getUserFolders(userId);
-
             return ResponseEntity.ok(folders);
         } catch (Exception e) {
             Map<String, String> error = new HashMap<>();
@@ -48,15 +56,17 @@ public class FolderController {
         }
     }
 
-    /**
-     * Get 3 most recent folders
-     * GET /api/folders/recent
-     * Response: [{"id": 1, "name": "...", "totalCards": 5, "createdAt": "..."}]
-     */
+    @Operation(
+            summary = "Get recent folders",
+            description = "Get the 3 most recently created folders for the authenticated user"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully retrieved recent folders"),
+            @ApiResponse(responseCode = "401", description = "User not authenticated")
+    })
     @GetMapping("/recent")
     public ResponseEntity<?> getRecentFolders(HttpSession session) {
         try {
-            // Get userId from session
             Integer userId = (Integer) session.getAttribute("userId");
 
             if (userId == null) {
@@ -65,10 +75,7 @@ public class FolderController {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
             }
 
-            // Get all user's folders
             List<Folder> folders = folderService.getUserFolders(userId);
-
-            // Return only the first 3 (most recent)
             List<Folder> recentFolders = folders.size() > 3
                     ? folders.subList(0, 3)
                     : folders;
@@ -81,16 +88,27 @@ public class FolderController {
         }
     }
 
-    /**
-     * Create a new folder
-     * POST /api/folders
-     * Body: {"name": "Spanish Vocabulary"}
-     * Response: {"id": 1, "name": "...", "totalCards": 0, "createdAt": "..."}
-     */
+    @Operation(
+            summary = "Create a new folder",
+            description = "Create a new flashcard folder for the authenticated user"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Folder created successfully"),
+            @ApiResponse(responseCode = "400", description = "Invalid input - folder name is required"),
+            @ApiResponse(responseCode = "401", description = "User not authenticated")
+    })
     @PostMapping
-    public ResponseEntity<?> createFolder(@RequestBody Map<String, String> request, HttpSession session) {
+    public ResponseEntity<?> createFolder(
+            @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    description = "Folder details",
+                    required = true,
+                    content = @Content(
+                            schema = @Schema(example = "{\"name\": \"Spanish Vocabulary\"}")
+                    )
+            )
+            @RequestBody Map<String, String> request,
+            HttpSession session) {
         try {
-            // Get userId from session
             Integer userId = (Integer) session.getAttribute("userId");
 
             if (userId == null) {
@@ -107,7 +125,6 @@ public class FolderController {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
             }
 
-            // Create folder
             Folder folder = new Folder();
             folder.setUserId(userId);
             folder.setFolderName(folderName);
@@ -116,31 +133,41 @@ public class FolderController {
 
             return ResponseEntity.status(HttpStatus.CREATED).body(createdFolder);
         } catch (IllegalArgumentException e) {
-            e.printStackTrace();  // ADD THIS
             Map<String, String> error = new HashMap<>();
             error.put("error", e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
         } catch (Exception e) {
-            e.printStackTrace();  // ADD THIS
             Map<String, String> error = new HashMap<>();
             error.put("error", "An error occurred while creating folder");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
         }
     }
 
-    /**
-     * Update/Rename a folder
-     * PUT /api/folders/{folderId}
-     * Body: {"name": "Updated Name"}
-     * Response: {"id": 1, "name": "...", "totalCards": 5, "createdAt": "..."}
-     */
+    @Operation(
+            summary = "Update a folder",
+            description = "Rename an existing folder (must be owned by authenticated user)"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Folder updated successfully"),
+            @ApiResponse(responseCode = "400", description = "Invalid input"),
+            @ApiResponse(responseCode = "401", description = "User not authenticated"),
+            @ApiResponse(responseCode = "403", description = "User doesn't own this folder"),
+            @ApiResponse(responseCode = "404", description = "Folder not found")
+    })
     @PutMapping("/{folderId}")
     public ResponseEntity<?> updateFolder(
+            @Parameter(description = "ID of the folder to update", required = true)
             @PathVariable Integer folderId,
+            @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    description = "New folder name",
+                    required = true,
+                    content = @Content(
+                            schema = @Schema(example = "{\"name\": \"Advanced Spanish\"}")
+                    )
+            )
             @RequestBody Map<String, String> request,
             HttpSession session) {
         try {
-            // Get userId from session
             Integer userId = (Integer) session.getAttribute("userId");
 
             if (userId == null) {
@@ -149,7 +176,6 @@ public class FolderController {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
             }
 
-            // Check if user owns this folder
             if (!folderService.isUserOwner(userId, folderId)) {
                 Map<String, String> error = new HashMap<>();
                 error.put("error", "You don't have permission to update this folder");
@@ -164,7 +190,6 @@ public class FolderController {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
             }
 
-            // Update folder
             Folder updatedFolder = new Folder();
             updatedFolder.setFolderName(folderName);
 
@@ -182,15 +207,22 @@ public class FolderController {
         }
     }
 
-    /**
-     * Delete a folder (and all its flashcards)
-     * DELETE /api/folders/{folderId}
-     * Response: {"message": "Folder deleted successfully"}
-     */
+    @Operation(
+            summary = "Delete a folder",
+            description = "Delete a folder and all its flashcards (must be owned by authenticated user)"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Folder deleted successfully"),
+            @ApiResponse(responseCode = "401", description = "User not authenticated"),
+            @ApiResponse(responseCode = "403", description = "User doesn't own this folder"),
+            @ApiResponse(responseCode = "404", description = "Folder not found")
+    })
     @DeleteMapping("/{folderId}")
-    public ResponseEntity<?> deleteFolder(@PathVariable Integer folderId, HttpSession session) {
+    public ResponseEntity<?> deleteFolder(
+            @Parameter(description = "ID of the folder to delete", required = true)
+            @PathVariable Integer folderId,
+            HttpSession session) {
         try {
-            // Get userId from session
             Integer userId = (Integer) session.getAttribute("userId");
 
             if (userId == null) {
@@ -199,14 +231,12 @@ public class FolderController {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
             }
 
-            // Check if user owns this folder
             if (!folderService.isUserOwner(userId, folderId)) {
                 Map<String, String> error = new HashMap<>();
                 error.put("error", "You don't have permission to delete this folder");
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).body(error);
             }
 
-            // Delete folder (and all its flashcards)
             folderService.deleteFolder(folderId);
 
             Map<String, String> response = new HashMap<>();
