@@ -1,0 +1,281 @@
+.login-container-login {
+  display: flex;
+  width: 100%;
+  height: 100vh;
+  background: white;
+  overflow: hidden;
+}
+
+/* Panneau gauche - centré et équilibré */
+.left-panel-login {
+  flex: 0.5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+}
+
+.brand-header-login {
+  margin-bottom: 30px;
+  width: 100%;
+  text-align: left;
+}
+
+.brand-title-login {
+  color: black;
+  font-size: 32px;
+  font-weight: bold;
+  letter-spacing: 1.5px;
+  margin: 0;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.image-container-login {
+  width: 100%;
+  max-width: 580px;
+  height: 580px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.side-image-login {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 20px;
+}
+
+/* Panneau droit - aligné avec le gauche */
+.right-panel-login {
+  flex: 0.5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+}
+
+/* Carte formulaire */
+.form-card-login {
+  width: 420px;
+  height: 400px;
+  background: #D9D9D9;
+  border-radius: 50px;
+  padding: 40px 35px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  border: 2px solid #000;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* En-tête formulaire */
+.form-header-login {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.form-title-login {
+  font-size: 28px;
+  font-weight: bold;
+   margin-bottom: 20px;
+  color: black;
+}
+
+/* Champs de saisie */
+.input-group-login {
+  position: relative;
+  margin-bottom: 40px;
+  width: 100%;
+}
+
+.input-group-login input {
+  width: 100%;
+  height: 45px;
+  padding: 12px 45px 12px 15px;
+  border: 1px solid #aaa;
+  border-radius: 15px;
+  background: #f0f0f0;
+  color: black;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+  font-size: 15px;
+  box-sizing: border-box;
+}
+
+.input-group-login input::placeholder {
+  color: black;
+  opacity: 1;
+  font-size: 14px;
+}
+
+.input-group-login input:focus {
+  outline: none;
+  border-color: #666;
+  box-shadow: 0 2px 6px rgba(89, 174, 248, 0.25);
+}
+
+/* Bouton œil */
+.eye-button-login {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-size: 18px;
+  color: #000;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  outline: none;
+  box-shadow: none;
+  z-index: 10;
+}
+
+/* SUPPRESSION TOTALE DES EFFETS */
+.eye-button-login:hover,
+.eye-button-login:focus,
+.eye-button-login:active {
+  outline: none;
+  border: none;
+  box-shadow: none;
+  background: none;
+  transform: translateY(-50%); /* empêche tout déplacement */
+}
+
+
+.eye-button-login:hover {
+  background: none;
+}
+
+/* Bouton login */
+.login-button-login {
+  width: 100%;
+  height: 45px;
+  background: #59AEF8;
+  color: white;
+  border: none;
+  border-radius: 15px;
+  font-weight: bold;
+  font-size: 16px;
+  margin-top: 15px;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+  display: block;
+  outline: none;
+}
+
+.login-button-login:hover {
+  background: #4A9DE6;
+}
+
+.login-button-login:focus {
+  outline: none;
+}
+
+.login-form-login {
+  margin-top: -2px; 
+}
+
+/* Footer */
+.form-footer-login {
+  text-align: center;
+  margin-top: 25px;
+}
+
+.footer-text-login {
+  font-size: 14px;
+  color: black;
+  margin-bottom: 10px;
+}
+
+.switch-button-login {
+  background: none;
+  border: none;
+  color: #59AEF8;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 15px;
+  padding: 5px 10px;
+
+  /* SUPPRESSION TOTALE DU BLEU */
+  outline: none;
+  box-shadow: none;
+}
+
+/* ÉTATS INTERACTIFS — AUCUN CADRE */
+.switch-button-login:hover,
+.switch-button-login:focus,
+.switch-button-login:active,
+.switch-button-login:focus-visible {
+  outline: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  background: none;
+  color: #59AEF8;
+}
+
+
+/* Responsive */
+@media (max-width: 1200px) {
+  .login-container-login {
+    flex-direction: column;
+    height: auto;
+    min-height: 100vh;
+  }
+  
+  .left-panel-login,
+  .right-panel-login {
+    flex: 1;
+    padding: 30px;
+  }
+  
+  .image-container-login {
+    max-width: 350px;
+    height: 400px;
+  }
+  
+  .form-card-login {
+    width: 350px;
+    height: 450px;
+    padding: 35px 30px;
+  }
+}
+
+@media (max-width: 900px) {
+  .image-container-login {
+    max-width: 280px;
+    height: 320px;
+  }
+  
+  .form-card-login {
+    width: 280px;
+    height: 380px;
+    padding: 25px 20px;
+    border-radius: 40px;
+  }
+  
+  .input-group-login input {
+    height: 40px;
+    padding: 10px 40px 10px 12px;
+    font-size: 14px;
+  }
+  
+  .eye-button-login {
+    right: 12px;
+    font-size: 16px;
+    width: 26px;
+    height: 26px;
+  }
+  
+  .login-button-login {
+    height: 40px;
+    font-size: 15px;
+  }
+}
