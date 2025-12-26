@@ -1,6 +1,10 @@
 package com.flashmind.controller;
 
 import com.flashmind.service.DashboardService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,24 +17,33 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/dashboard")
 @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
+@Tag(name = "Dashboard", description = "Dashboard overview with user statistics and recent activity")
 public class DashboardController {
 
     @Autowired
     private DashboardService dashboardService;
 
-    /**
-     * Get dashboard overview
-     * GET /api/dashboard/overview
-     * Response: {
-     *   "recentFolders": [...],
-     *   "recentSessions": [...],
-     *   "stats": {"totalFolders": 5, "totalCards": 20, "totalSessions": 10}
-     * }
-     */
+    @Operation(
+            summary = "Get dashboard overview",
+            description = "Retrieve a comprehensive dashboard overview for the authenticated user including recent folders (last 3), recent study sessions (last 5), and statistics (total folders, cards, and sessions)"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Successfully retrieved dashboard data. Returns recent folders, recent study sessions, and aggregated statistics."
+            ),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "User not authenticated"
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Internal server error while fetching dashboard data"
+            )
+    })
     @GetMapping("/overview")
     public ResponseEntity<?> getDashboardOverview(HttpSession session) {
         try {
-            // Get userId from session
             Integer userId = (Integer) session.getAttribute("userId");
 
             if (userId == null) {
@@ -39,7 +52,6 @@ public class DashboardController {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
             }
 
-            // Get dashboard data
             Map<String, Object> dashboard = dashboardService.getDashboardOverview(userId);
 
             return ResponseEntity.ok(dashboard);
