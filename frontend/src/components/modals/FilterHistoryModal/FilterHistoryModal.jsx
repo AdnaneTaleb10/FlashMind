@@ -1,102 +1,139 @@
+import React, { useState } from 'react';
 import './FilterHistoryModal.css';
-import { useState } from 'react';
 
-function FilterHistoryModal({ isOpen, onClose, onApplyFilter }) {
-  const [folder, setFolder] = useState('all');
-  const [minPercentage, setMinPercentage] = useState(0);
-  const [maxPercentage, setMaxPercentage] = useState(100);
-
-  if (!isOpen) return null;
+const FilterHistoryModal = ({ isOpen, onClose, onApplyFilter, folders = [] }) => {
+  const [selectedFolder, setSelectedFolder] = useState('all');
+  const [percentageRange, setPercentageRange] = useState({ min: 0, max: 100 });
 
   const handleSubmit = (e) => {
     e.preventDefault();
     onApplyFilter({
-      folder,
-      minPercentage,
-      maxPercentage
+      folder: selectedFolder,
+      minPercentage: percentageRange.min,
+      maxPercentage: percentageRange.max
     });
-  };
-
-  const handleReset = () => {
-    setFolder('all');
-    setMinPercentage(0);
-    setMaxPercentage(100);
-  };
-
-  const handleClose = () => {
-    handleReset();
     onClose();
   };
 
+  const handleReset = () => {
+    setSelectedFolder('all');
+    setPercentageRange({ min: 0, max: 100 });
+  };
+
+  const handleCancel = () => {
+    onClose();
+  };
+
+  const handleMinChange = (e) => {
+    const value = Math.min(Number(e.target.value), percentageRange.max);
+    setPercentageRange(prev => ({ ...prev, min: value }));
+  };
+
+  const handleMaxChange = (e) => {
+    const value = Math.max(Number(e.target.value), percentageRange.min);
+    setPercentageRange(prev => ({ ...prev, max: value }));
+  };
+
+  if (!isOpen) return null;
+
   return (
-    <div className="modal-overlay" onClick={handleClose}>
-      <div className="modal-container" onClick={(e) => e.stopPropagation()}>
-        <h2>Filter Study History</h2>
+    <div className="modal-overlay">
+      <div className="modal-container filter-modal">
+        <div className="modal-header">
+          <h2>Filter Study History</h2>
+        </div>
         
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className="modal-form">
           <div className="filter-section">
-            <h3>By Folder</h3>
+            <h3 className="filter-title">By Folder</h3>
             <div className="radio-group">
-              {['all', 'french', 'math', 'cs'].map((folderType) => (
-                <label key={folderType}>
-                  <input 
-                    type="radio" 
-                    name="folder" 
-                    value={folderType}
-                    checked={folder === folderType}
-                    onChange={(e) => setFolder(e.target.value)}
+              <label className="radio-option">
+                <input
+                  type="radio"
+                  name="folder"
+                  value="all"
+                  checked={selectedFolder === 'all'}
+                  onChange={(e) => setSelectedFolder(e.target.value)}
+                />
+                <span className="radio-label">All Folders</span>
+              </label>
+              
+              {folders.map(folder => (
+                <label key={folder.id} className="radio-option">
+                  <input
+                    type="radio"
+                    name="folder"
+                    value={folder.id}
+                    checked={selectedFolder === folder.id}
+                    onChange={(e) => setSelectedFolder(e.target.value)}
                   />
-                  {folderType === 'all' ? 'All Folders' : 
-                   folderType === 'cs' ? 'Computer Science' : 
-                   folderType.charAt(0).toUpperCase() + folderType.slice(1)}
+                  <span className="radio-label">{folder.name}</span>
                 </label>
               ))}
             </div>
           </div>
-
+          
           <div className="filter-section">
-            <h3>By Percentage</h3>
-            <div className="percentage-inputs">
-              <div className="input-group">
-                <label>Min:</label>
-                <input 
-                  type="range" 
-                  min="0" 
-                  max="100" 
-                  value={minPercentage}
-                  onChange={(e) => setMinPercentage(parseInt(e.target.value))}
+            <h3 className="filter-title">By Percentage</h3>
+            <div className="slider-group">
+              <div className="slider-control">
+                <label>Min: {percentageRange.min}%</label>
+                <input
+                  type="range"
+                  min="0"
+                  max="100"
+                  value={percentageRange.min}
+                  onChange={handleMinChange}
+                  className="slider"
                 />
-                <span>{minPercentage}%</span>
               </div>
-              <div className="input-group">
-                <label>Max:</label>
-                <input 
-                  type="range" 
-                  min="0" 
-                  max="100" 
-                  value={maxPercentage}
-                  onChange={(e) => setMaxPercentage(parseInt(e.target.value))}
+              
+              <div className="slider-control">
+                <label>Max: {percentageRange.max}%</label>
+                <input
+                  type="range"
+                  min="0"
+                  max="100"
+                  value={percentageRange.max}
+                  onChange={handleMaxChange}
+                  className="slider"
                 />
-                <span>{maxPercentage}%</span>
+              </div>
+              
+              <div className="percentage-display">
+                <span>Range: {percentageRange.min}% - {percentageRange.max}%</span>
               </div>
             </div>
           </div>
           
-          <div className="modal-buttons">
-            <button type="button" className="reset-btn" onClick={handleReset}>
+          <div className="modal-actions">
+            <button 
+              type="button" 
+              className="btn-reset"
+              onClick={handleReset}
+            >
               Reset
             </button>
-            <button type="button" className="cancel-btn" onClick={handleClose}>
-              Cancel
-            </button>
-            <button type="submit" className="apply-btn">
-              Apply Filter
-            </button>
+            <div className="action-group">
+              <button 
+                type="button" 
+                className="btn-secondary"
+                onClick={handleCancel}
+              >
+                Cancel
+              </button>
+              <button 
+                type="submit" 
+                className="btn-primary"
+              >
+                Apply Filter
+              </button>
+            </div>
           </div>
         </form>
       </div>
     </div>
   );
-}
+};
 
 export default FilterHistoryModal;

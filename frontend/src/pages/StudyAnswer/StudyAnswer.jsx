@@ -1,58 +1,31 @@
-import './StudyAnswer.css';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useSearchParams } from "react-router-dom";
+import "./StudyAnswer.css";
 
 function StudyAnswer() {
   const navigate = useNavigate();
-  const location = useLocation();
-  const searchParams = new URLSearchParams(location.search);
-  const subject = searchParams.get('subject') || 'French';
-
-  const handleNextCard = () => {
-    navigate(`/study-question?subject=${subject}`);
-  };
-
-  const handleCorrect = () => {
-    // Logique pour marquer comme correct
-    navigate(`/study-question?subject=${subject}`);
-  };
-
-  const handleWrong = () => {
-    // Logique pour marquer comme incorrect
-    navigate(`/study-question?subject=${subject}`);
-  };
-
-  const handleBack = () => {
-    navigate('/dashboard');
-  };
+  const [params] = useSearchParams();
+  const subject = params.get("subject") || "French";
 
   return (
-    <div className="study-answer">
+    <div className="study">
       <header className="study-header">
-        <button className="back-button" onClick={handleBack}>×</button>
         <h1>FLASH MIND</h1>
-        <div className="subject-info">Studying {subject}</div>
+        <span className="close" onClick={() => navigate("/dashboard")}>✖</span>
       </header>
 
-      <main className="answer-content">
-        <div className="answer-box">
-          "Bonjour" means "Good Morning"
+      <div className="card">
+        <h3>Studying {subject}</h3>
+        <p>"Bonjour" means "Good Morning"</p>
+
+        <button onClick={() => navigate(`/study-question?subject=${subject}`)}>
+          Next Card
+        </button>
+
+        <div className="feedback">
+          <button className="correct">Correct ✓</button>
+          <button className="wrong">Wrong ✗</button>
         </div>
-        
-        <div className="answer-actions">
-          <button className="next-card-button" onClick={handleNextCard}>
-            Next Card
-          </button>
-          
-          <div className="feedback-buttons">
-            <button className="correct-button" onClick={handleCorrect}>
-              Correct
-            </button>
-            <button className="wrong-button" onClick={handleWrong}>
-              Wrong X
-            </button>
-          </div>
-        </div>
-      </main>
+      </div>
     </div>
   );
 }

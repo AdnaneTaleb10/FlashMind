@@ -1,177 +1,117 @@
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import FilterHistoryModal from '../../components/modals/FilterHistoryModal/index.js';
 import './StudyHistory.css';
-import { useState } from 'react';
-import FilterHistoryModal from '../../components/modals/FilterHistoryModal/FilterHistoryModal';
 
-function StudyHistory() {
-  const [showFilterModal, setShowFilterModal] = useState(false);
-  const [activeFilters, setActiveFilters] = useState({
-    folder: 'all',
-    minPercentage: 0,
-    maxPercentage: 100
-  });
+const StudyHistory = () => {
+  const navigate = useNavigate();
+  const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
 
-  const handleApplyFilter = (newFilters) => {
-    setActiveFilters(newFilters);
-    setShowFilterModal(false);
-    
-    // Afficher le filtre appliqué
-    const folderName = newFilters.folder === 'all' ? 'All Folders' : 
-                      newFilters.folder === 'cs' ? 'Computer Science' : 
-                      newFilters.folder.charAt(0).toUpperCase() + newFilters.folder.slice(1);
-    
-    alert(`Filter applied:\n📁 Folder: ${folderName}\n📊 Range: ${newFilters.minPercentage}% - ${newFilters.maxPercentage}%`);
-  };
-
-  const handleBack = () => {
-    window.history.back(); // Retour à la page précédente
-  };
-
-  // Données des sessions d'étude
-  const studySessions = [
-    { id: 1, folder: 'French', percentage: 85, lastRevision: '1 hour ago' },
-    { id: 2, folder: 'Math', percentage: 65, lastRevision: '3 hours ago' },
-    { id: 3, folder: 'Computer Science', percentage: 45, lastRevision: '18 hours ago' },
+  // Données de l'historique
+  const studyHistory = [
+    { id: 1, folderName: 'French', percentage: 85, lastRevision: '1 hour ago' },
+    { id: 2, folderName: 'Math', percentage: 65, lastRevision: '3 hours ago' },
+    { id: 3, folderName: 'Computer Science', percentage: 45, lastRevision: '18 hours ago' }
   ];
 
-  // Filtrer les sessions selon les critères actifs
-  const filteredSessions = studySessions.filter(session => {
-    // Filtre par dossier
-    if (activeFilters.folder !== 'all') {
-      const sessionFolder = session.folder.toLowerCase().replace(' ', '');
-      const filterFolder = activeFilters.folder;
-      if (filterFolder === 'cs' && sessionFolder !== 'computerscience') return false;
-      if (filterFolder !== 'cs' && sessionFolder !== filterFolder) return false;
-    }
-    
-    // Filtre par pourcentage
-    if (session.percentage < activeFilters.minPercentage || session.percentage > activeFilters.maxPercentage) {
-      return false;
-    }
-    
-    return true;
-  });
+  const folders = [
+    { id: 'french', name: 'French' },
+    { id: 'math', name: 'Math' },
+    { id: 'cs', name: 'Computer Science' }
+  ];
 
-  // Calculer les statistiques
-  const totalSessions = filteredSessions.length;
-  const averagePercentage = filteredSessions.length > 0 
-    ? Math.round(filteredSessions.reduce((sum, session) => sum + session.percentage, 0) / filteredSessions.length)
-    : 0;
-
-  const handleReviewSession = (folderName) => {
-    alert(`Starting review session for "${folderName}"`);
-    // Navigation vers StudyQuestion
+  const handleApplyFilter = (filterOptions) => {
+    console.log('Filter applied:', filterOptions);
+    // Ici vous pourriez filtrer les données
   };
 
-  const handleViewResults = (folderName) => {
-    alert(`Viewing results for "${folderName}"`);
-    // Navigation vers SessionResults
+  const getPercentageColor = (percentage) => {
+    if (percentage >= 80) return '#27ae60';
+    if (percentage >= 60) return '#f39c12';
+    return '#e74c3c';
   };
 
   return (
     <div className="study-history">
-      <div className="header-section">
-        <button className="back-button" onClick={handleBack}>×</button>
-        <h1>FLASH MIND</h1>
-        <div className="page-title">Study History</div>
-      </div>
+      {/* Header */}
+      <header className="app-header">
+        <div className="header-content">
+          <h1>FLASH MIND</h1>
+        </div>
+      </header>
 
-      {/* Statistiques */}
-      <div className="stats-summary">
-        <div className="stat-item">
-          <span className="stat-label">Total Sessions:</span>
-          <span className="stat-value">{totalSessions}</span>
+      <main className="history-content">
+        {/* Page Title */}
+        <div className="page-title-container">
+          <h2 className="page-title">Study History</h2>
         </div>
-        <div className="stat-item">
-          <span className="stat-label">Average Score:</span>
-          <span className="stat-value">{averagePercentage}%</span>
-        </div>
-        <div className="filter-status">
-          <span className="filter-label">Active Filter:</span>
-          <span className="filter-value">
-            {activeFilters.folder === 'all' ? 'All Folders' : 
-             activeFilters.folder === 'cs' ? 'Computer Science' : 
-             activeFilters.folder.charAt(0).toUpperCase() + activeFilters.folder.slice(1)}
-          </span>
-        </div>
-      </div>
 
-      <div className="history-table">
-        <table>
-          <thead>
-            <tr>
-              <th>Folder's name</th>
-              <th>Percentage</th>
-              <th>Last revision</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredSessions.length === 0 ? (
+        {/* History Table */}
+        <div className="history-table-container">
+          <table className="history-table">
+            <thead>
               <tr>
-                <td colSpan="4" className="no-results">
-                  No study sessions found with current filters
-                </td>
+                <th className="folder-header">Folder's name</th>
+                <th className="percentage-header">Percentage</th>
+                <th className="revision-header">Last revision</th>
               </tr>
-            ) : (
-              filteredSessions.map(session => (
-                <tr key={session.id}>
-                  <td className="folder-cell">{session.folder}</td>
-                  <td className="percentage-cell">
-                    <div className="percentage-bar">
-                      <div 
-                        className="percentage-fill"
-                        style={{ width: `${session.percentage}%` }}
-                      ></div>
-                      <span className="percentage-text">{session.percentage}%</span>
+            </thead>
+            <tbody>
+              {studyHistory.map((item) => (
+                <tr key={item.id} className="history-row">
+                  <td className="folder-cell">
+                    <div className="folder-info">
+                      <span className="folder-icon">📁</span>
+                      <span className="folder-name">{item.folderName}</span>
                     </div>
                   </td>
-                  <td className="time-cell">{session.lastRevision}</td>
-                  <td className="actions-cell">
-                    <button 
-                      className="review-btn"
-                      onClick={() => handleReviewSession(session.folder)}
+                  <td className="percentage-cell">
+                    <div 
+                      className="percentage-badge"
+                      style={{ 
+                        backgroundColor: getPercentageColor(item.percentage),
+                        color: 'white'
+                      }}
                     >
-                      Review
-                    </button>
-                    <button 
-                      className="results-btn"
-                      onClick={() => handleViewResults(session.folder)}
-                    >
-                      Results
-                    </button>
+                      {item.percentage}%
+                    </div>
+                  </td>
+                  <td className="revision-cell">
+                    <span className="revision-time">{item.lastRevision}</span>
                   </td>
                 </tr>
-              ))
-            )}
-          </tbody>
-        </table>
-      </div>
+              ))}
+            </tbody>
+          </table>
+        </div>
 
-      <div className="actions">
-        <button 
-          className="filter-button" 
-          onClick={() => setShowFilterModal(true)}
-        >
-          Filter History
-        </button>
-        <button 
-          className="clear-filter-button"
-          onClick={() => {
-            setActiveFilters({ folder: 'all', minPercentage: 0, maxPercentage: 100 });
-            alert('Filters cleared');
-          }}
-        >
-          Clear Filters
-        </button>
-      </div>
+        {/* Action Buttons */}
+        <div className="history-actions">
+          <button 
+            className="btn filter-btn"
+            onClick={() => setIsFilterModalOpen(true)}
+          >
+            Filter History
+          </button>
+          
+          <button 
+            className="btn back-btn"
+            onClick={() => navigate('/dashboard')}
+          >
+            ← Back
+          </button>
+        </div>
+      </main>
 
+      {/* Filter Modal */}
       <FilterHistoryModal
-        isOpen={showFilterModal}
-        onClose={() => setShowFilterModal(false)}
+        isOpen={isFilterModalOpen}
+        onClose={() => setIsFilterModalOpen(false)}
         onApplyFilter={handleApplyFilter}
+        folders={folders}
       />
     </div>
   );
-}
+};
 
 export default StudyHistory;

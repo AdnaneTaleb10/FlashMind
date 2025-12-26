@@ -1,36 +1,25 @@
-import './StudyQuestion.css';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useSearchParams } from "react-router-dom";
+import "./StudyQuestion.css";
 
 function StudyQuestion() {
   const navigate = useNavigate();
-  const location = useLocation();
-  const searchParams = new URLSearchParams(location.search);
-  const subject = searchParams.get('subject') || 'French';
-
-  const handleShowAnswer = () => {
-    navigate(`/study-answer?subject=${subject}`);
-  };
-
-  const handleBack = () => {
-    navigate('/dashboard');
-  };
+  const [params] = useSearchParams();
+  const subject = params.get("subject") || "French";
 
   return (
-    <div className="study-question">
+    <div className="study">
       <header className="study-header">
-        <button className="back-button" onClick={handleBack}>×</button>
         <h1>FLASH MIND</h1>
-        <div className="subject-info">Studying {subject}</div>
+        <span className="close" onClick={() => navigate("/dashboard")}>✖</span>
       </header>
 
-      <main className="question-content">
-        <div className="question-box">
-          "Bonjour" means what ?
-        </div>
-        <button className="show-answer-button" onClick={handleShowAnswer}>
+      <div className="card">
+        <h3>Studying {subject}</h3>
+        <p>"Bonjour" means what ?</p>
+        <button onClick={() => navigate(`/study-answer?subject=${subject}`)}>
           Show Answer
         </button>
-      </main>
+      </div>
     </div>
   );
 }

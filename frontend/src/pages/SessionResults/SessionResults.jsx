@@ -1,55 +1,41 @@
-import './SessionResults.css';
-import { useNavigate } from 'react-router-dom';
+import React from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import "./SessionResults.css";
 
-function SessionResults() {
+const SessionResults = () => {
   const navigate = useNavigate();
+  const location = useLocation();
 
-  const handleReviewWrongAnswers = () => {
-    navigate('/study-question?subject=Review&mode=wrong');
-  };
-
-  const handleNewSession = () => {
-    navigate('/study-question');
-  };
-
-  const handleBackToDashboard = () => {
-    navigate('/dashboard');
-  };
+  const { correct = 0, wrong = 0 } = location.state || {};
+  const total = correct + wrong;
+  const score = total === 0 ? 0 : Math.round((correct / total) * 100);
 
   return (
     <div className="session-results">
-      <h1>FLASH MIND</h1>
-      <div className="results-title">Session Completed</div>
-      <div className="results-subtitle">Great Job !</div>
+      <header className="app-header">
+        <h1>FLASH MIND</h1>
+      </header>
 
-      <div className="results-stats">
-        <div className="stat-item">
-          <span className="stat-label">Score:</span>
-          <span className="stat-value">85%</span>
-        </div>
-        <div className="stat-item">
-          <span className="stat-label">Correct answer:</span>
-          <span className="stat-value">15</span>
-        </div>
-        <div className="stat-item">
-          <span className="stat-label">Wrong answers:</span>
-          <span className="stat-value">4</span>
-        </div>
-      </div>
+      <main className="results-content">
+        <h2>Session Completed</h2>
 
-      <div className="action-buttons">
-        <button className="review-btn" onClick={handleReviewWrongAnswers}>
-          Review Wrong Answers
-        </button>
-        <button className="new-session-btn" onClick={handleNewSession}>
-          New Study Session
-        </button>
-        <button className="dashboard-btn" onClick={handleBackToDashboard}>
-          Back to Dashboard
-        </button>
-      </div>
+        <div className="stats">
+          <div>Score: {score}%</div>
+          <div>Correct: {correct}</div>
+          <div>Wrong: {wrong}</div>
+        </div>
+
+        <div className="actions">
+          <button onClick={() => navigate("/study-question")}>
+            New Session
+          </button>
+          <button onClick={() => navigate("/dashboard")}>
+            Back to Dashboard
+          </button>
+        </div>
+      </main>
     </div>
   );
-}
+};
 
 export default SessionResults;

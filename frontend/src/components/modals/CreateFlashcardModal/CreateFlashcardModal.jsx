@@ -1,43 +1,33 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import './CreateFlashcardModal.css';
 
-function CreateFlashcardModal({ isOpen, onClose, onCreate }) {
-  const [formData, setFormData] = useState({
-    front: '',
-    back: ''
-  });
+const CreateFlashcardModal = ({ isOpen, onClose, onCreateFlashcard }) => {
+  const [question, setQuestion] = useState('');
+  const [answer, setAnswer] = useState('');
   const [errors, setErrors] = useState({});
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const newErrors = {};
     
-    if (!formData.front.trim()) {
-      newErrors.front = 'Please enter a question';
-    }
-    if (!formData.back.trim()) {
-      newErrors.back = 'Please enter an answer';
-    }
+    const newErrors = {};
+    if (!question.trim()) newErrors.question = 'Question is required';
+    if (!answer.trim()) newErrors.answer = 'Answer is required';
     
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
       return;
     }
     
-    onCreate(formData);
-    handleClose();
+    onCreateFlashcard({ question, answer });
+    setQuestion('');
+    setAnswer('');
+    setErrors({});
+    onClose();
   };
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-    if (errors[name]) {
-      setErrors(prev => ({ ...prev, [name]: '' }));
-    }
-  };
-
-  const handleClose = () => {
-    setFormData({ front: '', back: '' });
+  const handleCancel = () => {
+    setQuestion('');
+    setAnswer('');
     setErrors({});
     onClose();
   };
@@ -45,48 +35,58 @@ function CreateFlashcardModal({ isOpen, onClose, onCreate }) {
   if (!isOpen) return null;
 
   return (
-    <div className="modal-overlay" onClick={handleClose}>
-      <div className="modal" onClick={e => e.stopPropagation()}>
+    <div className="modal-overlay">
+      <div className="modal-container">
         <div className="modal-header">
           <h2>Create New Flash Card</h2>
-          <button className="close-btn" onClick={handleClose}>
-            ✕
-          </button>
         </div>
         
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className="modal-form">
           <div className="form-group">
-            <label>Front (Question) :</label>
+            <label htmlFor="question">Front(Question):</label>
             <textarea
-              name="front"
-              value={formData.front}
-              onChange={handleChange}
+              id="question"
+              value={question}
+              onChange={(e) => {
+                setQuestion(e.target.value);
+                setErrors({...errors, question: ''});
+              }}
               placeholder="Question"
               rows={4}
-              className={errors.front ? 'error' : ''}
+              className={errors.question ? 'input-error' : ''}
               autoFocus
             />
-            {errors.front && <div className="error-message">{errors.front}</div>}
+            {errors.question && <span className="error-message">{errors.question}</span>}
           </div>
-
+          
           <div className="form-group">
-            <label>Back (Answer) :</label>
+            <label htmlFor="answer">Back(Answer):</label>
             <textarea
-              name="back"
-              value={formData.back}
-              onChange={handleChange}
+              id="answer"
+              value={answer}
+              onChange={(e) => {
+                setAnswer(e.target.value);
+                setErrors({...errors, answer: ''});
+              }}
               placeholder="Answer"
               rows={4}
-              className={errors.back ? 'error' : ''}
+              className={errors.answer ? 'input-error' : ''}
             />
-            {errors.back && <div className="error-message">{errors.back}</div>}
+            {errors.answer && <span className="error-message">{errors.answer}</span>}
           </div>
-
+          
           <div className="modal-actions">
-            <button type="button" className="cancel-btn" onClick={handleClose}>
+            <button 
+              type="button" 
+              className="btn-secondary"
+              onClick={handleCancel}
+            >
               Cancel
             </button>
-            <button type="submit" className="create-btn">
+            <button 
+              type="submit" 
+              className="btn-primary"
+            >
               Create FlashCard
             </button>
           </div>
@@ -94,6 +94,6 @@ function CreateFlashcardModal({ isOpen, onClose, onCreate }) {
       </div>
     </div>
   );
-}
+};
 
 export default CreateFlashcardModal;

@@ -1,41 +1,69 @@
+import React, { useState } from 'react';
 import './CreateFolderModal.css';
 
-function CreateFolderModal({ isOpen, onClose, onCreate }) {
-  if (!isOpen) return null;
+const CreateFolderModal = ({ isOpen, onClose, onCreateFolder }) => {
+  const [folderName, setFolderName] = useState('');
+  const [error, setError] = useState('');
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const formData = new FormData(e.target);
-    const folderName = formData.get('folderName');
     
-    if (folderName && folderName.trim()) {
-      onCreate(folderName.trim());
-      e.target.reset();
+    if (!folderName.trim()) {
+      setError('Folder name is required');
+      return;
     }
+    
+    onCreateFolder(folderName);
+    setFolderName('');
+    setError('');
+    onClose();
   };
 
+  const handleCancel = () => {
+    setFolderName('');
+    setError('');
+    onClose();
+  };
+
+  if (!isOpen) return null;
+
   return (
-    <div className="modal-overlay" onClick={onClose}>
-      <div className="modal-container" onClick={(e) => e.stopPropagation()}>
-        <h2>Create New Folder</h2>
+    <div className="modal-overlay">
+      <div className="modal-container">
+        <div className="modal-header">
+          <h2>Create New Folder</h2>
+        </div>
         
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className="modal-form">
           <div className="form-group">
-            <label>Folder Name :</label>
-            <input 
-              type="text" 
-              name="folderName"
+            <label htmlFor="folderName">Folder Name:</label>
+            <input
+              type="text"
+              id="folderName"
+              value={folderName}
+              onChange={(e) => {
+                setFolderName(e.target.value);
+                setError('');
+              }}
               placeholder="folder's name"
-              required
+              className={error ? 'input-error' : ''}
               autoFocus
             />
+            {error && <span className="error-message">{error}</span>}
           </div>
           
-          <div className="modal-buttons">
-            <button type="button" className="cancel-btn" onClick={onClose}>
+          <div className="modal-actions">
+            <button 
+              type="button" 
+              className="btn-secondary"
+              onClick={handleCancel}
+            >
               Cancel
             </button>
-            <button type="submit" className="create-btn">
+            <button 
+              type="submit" 
+              className="btn-primary"
+            >
               Create Folder
             </button>
           </div>
@@ -43,6 +71,6 @@ function CreateFolderModal({ isOpen, onClose, onCreate }) {
       </div>
     </div>
   );
-}
+};
 
 export default CreateFolderModal;

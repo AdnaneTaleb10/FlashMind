@@ -1,198 +1,56 @@
-.dashboard {
+.dashboard-header {
+  background: #4a90e2;
+  color: white;
   padding: 20px;
-  font-family: Arial, sans-serif;
-  max-width: 800px;
-  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
 }
 
-.dashboard h1 {
-  text-align: center;
-  font-size: 28px;
-  margin-bottom: 10px;
-  color: #333;
-}
-
-.dashboard h2 {
-  text-align: center;
-  font-size: 22px;
-  margin-bottom: 30px;
-  color: #555;
+.dashboard-container {
+  max-width: 900px;
+  margin: auto;
+  background: #f9f9f9;
+  padding: 30px;
+  border-radius: 20px;
 }
 
 .stats {
   display: flex;
-  justify-content: center;
-  gap: 40px;
-  margin-bottom: 40px;
+  justify-content: space-around;
+  margin: 20px 0;
 }
 
-.stat-item {
+.stat-card {
+  border: 2px solid #4a90e2;
+  padding: 20px;
+  border-radius: 10px;
+  width: 150px;
   text-align: center;
-  padding: 20px;
+}
+
+.box {
   border: 2px solid #4a90e2;
-  border-radius: 10px;
-  min-width: 150px;
-}
-
-.stat-number {
-  font-size: 36px;
-  font-weight: bold;
-  color: #4a90e2;
-  margin-bottom: 5px;
-}
-
-.stat-label {
-  font-size: 16px;
-  color: #666;
-}
-
-.folders-section,
-.sessions-section {
-  border: 2px solid #4a90e2;
-  border-radius: 10px;
   padding: 20px;
-  margin-bottom: 30px;
-}
-
-.folders-section h3,
-.sessions-section h3 {
-  font-size: 18px;
-  color: #333;
-  margin-bottom: 20px;
-  padding-left: 10px;
-  border-left: 4px solid #4a90e2;
-}
-
-.folder-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 15px 10px;
-  border-bottom: 1px solid #eee;
-}
-
-.folder-item:last-child {
-  border-bottom: none;
-}
-
-.folder-left {
-  display: flex;
-  flex-direction: column;
-}
-
-.folder-name {
-  font-weight: bold;
-  color: #333;
-  margin-bottom: 5px;
-}
-
-.card-count {
-  background-color: #f5f5f5;
-  color: #666;
-  padding: 3px 10px;
-  border-radius: 12px;
-  font-size: 14px;
-  width: fit-content;
-}
-
-.folder-actions {
-  display: flex;
-  gap: 8px;
-}
-
-.folder-actions button {
-  padding: 6px 12px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 14px;
-  background-color: #4a90e2;
-  color: white;
-  transition: background-color 0.3s;
-}
-
-.folder-actions button:hover {
-  background-color: #357ae8;
-}
-
-.folder-actions .delete-btn {
-  background-color: #e74c3c;
-}
-
-.folder-actions .delete-btn:hover {
-  background-color: #c0392b;
-}
-
-.folder-buttons {
-  display: flex;
-  justify-content: space-between;
+  border-radius: 10px;
   margin-top: 20px;
-  padding-top: 20px;
-  border-top: 1px solid #eee;
 }
 
-.folder-buttons button {
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  background-color: #4a90e2;
-  color: white;
-  font-size: 15px;
-}
-
-.folder-buttons button:hover {
-  background-color: #357ae8;
-}
-
-.session-item {
+.folder-row,
+.session-row {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  padding: 12px 10px;
-  border-bottom: 1px solid #eee;
+  margin: 10px 0;
 }
 
-.session-item:last-child {
-  border-bottom: none;
-}
-
-.session-name {
-  flex: 1;
-  color: #333;
-}
-
-.session-percentage {
-  width: 60px;
-  text-align: center;
-  font-weight: bold;
-  color: #4a90e2;
-}
-
-.session-time {
-  width: 100px;
-  text-align: right;
-  color: #888;
-  font-size: 14px;
-}
-
-.show-history-btn {
-  display: block;
-  margin: 20px auto 0;
-  padding: 10px 30px;
-  background-color: #4a90e2;
+button {
+  background: #4a90e2;
   color: white;
   border: none;
-  border-radius: 5px;
+  padding: 8px 14px;
+  border-radius: 8px;
   cursor: pointer;
-  font-size: 15px;
 }
 
-.show-history-btn:hover {
-  background-color: #357ae8;
-}
-
-.folder-item.selected {
-  background-color: #f0f8ff;
-  border-color: #4a90e2;
-}
+.dot.green { background: #27ae60; }
+.dot.yellow { background: #f1c40f; }
+.dot.red { background: #e74c3c; }
