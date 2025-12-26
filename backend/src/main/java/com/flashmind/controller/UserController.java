@@ -2,6 +2,12 @@ package com.flashmind.controller;
 
 import com.flashmind.model.User;
 import com.flashmind.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +19,8 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
-@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true") // Important: allowCredentials for sessions
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
+@Tag(name = "Authentication & User Profile", description = "User authentication, registration, and profile management")
 public class UserController {
 
     @Autowired
@@ -21,12 +28,25 @@ public class UserController {
 
     // ==================== 1. Authentication Endpoints ====================
 
-    /**
-     * Register a new user
-     * POST /api/auth/register
-     */
+    @Operation(
+            summary = "Register a new user",
+            description = "Create a new user account with email, username, password, and name. Auto-login after registration."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "User registered successfully"),
+            @ApiResponse(responseCode = "400", description = "Invalid input or email/username already exists")
+    })
     @PostMapping("/auth/register")
-    public ResponseEntity<?> register(@RequestBody Map<String, String> request, HttpSession session) {
+    public ResponseEntity<?> register(
+            @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    description = "User registration details",
+                    required = true,
+                    content = @Content(
+                            schema = @Schema(example = "{\"email\": \"user@example.com\", \"password\": \"password123\", \"confirmPassword\": \"password123\", \"name\": \"John Doe\", \"username\": \"johndoe\"}")
+                    )
+            )
+            @RequestBody Map<String, String> request,
+            HttpSession session) {
         try {
             String email = request.get("email");
             String password = request.get("password");
@@ -34,14 +54,12 @@ public class UserController {
             String name = request.get("name");
             String username = request.get("username");
 
-            // Validate passwords match
             if (!password.equals(confirmPassword)) {
                 Map<String, String> error = new HashMap<>();
                 error.put("error", "Passwords do not match");
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
             }
 
-            // Create user
             User user = new User();
             user.setEmail(email);
             user.setPassword(password);
@@ -50,11 +68,9 @@ public class UserController {
 
             User registeredUser = userService.registerUser(user);
 
-            // Auto-login: Store userId in session
             session.setAttribute("userId", registeredUser.getId());
             session.setAttribute("username", registeredUser.getUsername());
 
-            // Response
             Map<String, Object> response = new HashMap<>();
             response.put("id", registeredUser.getId());
             response.put("email", registeredUser.getEmail());
@@ -73,12 +89,26 @@ public class UserController {
         }
     }
 
-    /**
-     * Login user
-     * POST /api/auth/login
-     */
+    @Operation(
+            summary = "Login user",
+            description = "Authenticate user with email and password. Creates a session on success."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Login successful"),
+            @ApiResponse(responseCode = "400", description = "Email and password are required"),
+            @ApiResponse(responseCode = "401", description = "Invalid credentials")
+    })
     @PostMapping("/auth/login")
-    public ResponseEntity<?> login(@RequestBody Map<String, String> credentials, HttpSession session) {
+    public ResponseEntity<?> login(
+            @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    description = "Login credentials",
+                    required = true,
+                    content = @Content(
+                            schema = @Schema(example = "{\"email\": \"user@example.com\", \"password\": \"password123\"}")
+                    )
+            )
+            @RequestBody Map<String, String> credentials,
+            HttpSession session) {
         try {
             String email = credentials.get("email");
             String password = credentials.get("password");
@@ -89,21 +119,17 @@ public class UserController {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
             }
 
-            // Find user by email
             User user = userService.getUserByEmail(email);
 
-            // Check password (TODO: use hashed passwords in production)
             if (!user.getPassword().equals(password)) {
                 Map<String, String> error = new HashMap<>();
                 error.put("error", "Invalid email or password");
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
             }
 
-            // Store userId in session (this is the key part!)
             session.setAttribute("userId", user.getId());
             session.setAttribute("username", user.getUsername());
 
-            // Response
             Map<String, Object> response = new HashMap<>();
             response.put("id", user.getId());
             response.put("email", user.getEmail());
@@ -122,14 +148,16 @@ public class UserController {
         }
     }
 
-    /**
-     * Logout user
-     * POST /api/auth/logout
-     */
+    @Operation(
+            summary = "Logout user",
+            description = "End the current user session"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Logout successful")
+    })
     @PostMapping("/auth/logout")
     public ResponseEntity<?> logout(HttpSession session) {
         try {
-            // Destroy the session
             session.invalidate();
 
             Map<String, String> response = new HashMap<>();
@@ -145,14 +173,18 @@ public class UserController {
 
     // ==================== 2. User Profile Endpoints ====================
 
-    /**
-     * Get current user profile
-     * GET /api/users/profile
-     */
+    @Operation(
+            summary = "Get current user profile",
+            description = "Retrieve profile information for the authenticated user"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Profile retrieved successfully"),
+            @ApiResponse(responseCode = "401", description = "User not authenticated"),
+            @ApiResponse(responseCode = "404", description = "User not found")
+    })
     @GetMapping("/users/profile")
     public ResponseEntity<?> getUserProfile(HttpSession session) {
         try {
-            // Get userId from session
             Integer userId = (Integer) session.getAttribute("userId");
 
             if (userId == null) {
@@ -182,14 +214,27 @@ public class UserController {
         }
     }
 
-    /**
-     * Update user profile (name/username)
-     * PUT /api/users/profile
-     */
+    @Operation(
+            summary = "Update user profile",
+            description = "Update name and/or username for the authenticated user"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Profile updated successfully"),
+            @ApiResponse(responseCode = "400", description = "Invalid input or username already taken"),
+            @ApiResponse(responseCode = "401", description = "User not authenticated")
+    })
     @PutMapping("/users/profile")
-    public ResponseEntity<?> updateUserProfile(@RequestBody Map<String, String> updates, HttpSession session) {
+    public ResponseEntity<?> updateUserProfile(
+            @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    description = "Updated profile information",
+                    required = true,
+                    content = @Content(
+                            schema = @Schema(example = "{\"name\": \"Jane Doe\", \"username\": \"janedoe\"}")
+                    )
+            )
+            @RequestBody Map<String, String> updates,
+            HttpSession session) {
         try {
-            // Get userId from session
             Integer userId = (Integer) session.getAttribute("userId");
 
             if (userId == null) {
@@ -207,7 +252,6 @@ public class UserController {
 
             User user = userService.updateUserProfile(userId, updatedUser);
 
-            // Update session username if changed
             session.setAttribute("username", user.getUsername());
 
             Map<String, Object> response = new HashMap<>();
@@ -229,14 +273,27 @@ public class UserController {
         }
     }
 
-    /**
-     * Change password
-     * PUT /api/users/password
-     */
+    @Operation(
+            summary = "Change password",
+            description = "Update password for the authenticated user. Requires current password for verification."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Password updated successfully"),
+            @ApiResponse(responseCode = "400", description = "Invalid input or password too short"),
+            @ApiResponse(responseCode = "401", description = "User not authenticated or current password incorrect")
+    })
     @PutMapping("/users/password")
-    public ResponseEntity<?> changePassword(@RequestBody Map<String, String> passwords, HttpSession session) {
+    public ResponseEntity<?> changePassword(
+            @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    description = "Current and new password",
+                    required = true,
+                    content = @Content(
+                            schema = @Schema(example = "{\"currentPassword\": \"oldpass123\", \"newPassword\": \"newpass123\"}")
+                    )
+            )
+            @RequestBody Map<String, String> passwords,
+            HttpSession session) {
         try {
-            // Get userId from session
             Integer userId = (Integer) session.getAttribute("userId");
 
             if (userId == null) {
@@ -254,24 +311,20 @@ public class UserController {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
             }
 
-            // Get user
             User user = userService.getUserById(userId);
 
-            // Verify current password (TODO: use hashed passwords)
             if (!user.getPassword().equals(currentPassword)) {
                 Map<String, String> error = new HashMap<>();
                 error.put("error", "Current password is incorrect");
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
             }
 
-            // Validate new password
             if (newPassword.length() < 6) {
                 Map<String, String> error = new HashMap<>();
                 error.put("error", "New password must be at least 6 characters");
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
             }
 
-            // Update password (TODO: hash password before saving)
             user.setPassword(newPassword);
             userService.updateUserProfile(userId, user);
 
@@ -290,10 +343,13 @@ public class UserController {
         }
     }
 
-    /**
-     * Check if user is authenticated (helper endpoint)
-     * GET /api/auth/check
-     */
+    @Operation(
+            summary = "Check authentication status",
+            description = "Check if the current session is authenticated"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Authentication status returned")
+    })
     @GetMapping("/auth/check")
     public ResponseEntity<?> checkAuth(HttpSession session) {
         Integer userId = (Integer) session.getAttribute("userId");
