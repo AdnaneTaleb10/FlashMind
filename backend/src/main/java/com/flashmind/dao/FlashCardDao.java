@@ -77,9 +77,12 @@ public class FlashCardDao {
     }
 
     // Update flash card
-    public int updateFlashCard(FlashCard flashCard) {
+    public FlashCard updateFlashCard(FlashCard flashCard) {
         String sql = "UPDATE flash_cards SET front_text = ?, back_text = ? WHERE id = ?";
-        return jdbcTemplate.update(sql, flashCard.getFrontText(), flashCard.getBackText(), flashCard.getId());
+        jdbcTemplate.update(sql, flashCard.getFrontText(), flashCard.getBackText(), flashCard.getId());
+
+        return findById(flashCard.getId()).orElseThrow(() ->
+                new RuntimeException("Failed to retrieve updated flashcard"));
     }
 
     // Delete flash card by ID

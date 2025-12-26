@@ -4,8 +4,11 @@ import com.flashmind.model.StudySession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
@@ -30,10 +33,23 @@ public class StudySessionDao {
         }
     };
 
-    // Create a new study session
-    public int createStudySession(StudySession studySession) {
+    // Create a new study session - Returns the session with generated ID
+    public StudySession createStudySession(StudySession studySession) {
         String sql = "INSERT INTO study_sessions (user_id, folder_id, date) VALUES (?, ?, now())";
-        return jdbcTemplate.update(sql, studySession.getUserId(), studySession.getFolderId());
+
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+
+        jdbcTemplate.update(connection -> {
+            PreparedStatement ps = connection.prepareStatement(sql, new String[]{"id"});
+            ps.setInt(1, studySession.getUserId());
+            ps.setInt(2, studySession.getFolderId());
+            return ps;
+        }, keyHolder);
+
+        Integer generatedId = keyHolder.getKey().intValue();
+
+        return findById(generatedId).orElseThrow(() ->
+                new RuntimeException("Failed to retrieve created study session"));
     }
 
     // Find study session by ID

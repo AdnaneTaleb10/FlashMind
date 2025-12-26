@@ -18,6 +18,7 @@ public class FlashCardService {
     private FolderDao folderDao;
 
     // Create a new flash card
+// Create a new flash card
     public FlashCard createFlashCard(FlashCard flashCard) {
         // Validate folder exists
         if (!folderDao.findById(flashCard.getFolderId()).isPresent()) {
@@ -34,13 +35,13 @@ public class FlashCardService {
             throw new IllegalArgumentException("Back text cannot be empty");
         }
 
-        // Create flash card
-        flashCardDao.createFlashCard(flashCard);
+        // Create flash card and capture the returned object
+        FlashCard createdCard = flashCardDao.createFlashCard(flashCard);
 
         // Update folder's total card count
         folderDao.updateTotalCards(flashCard.getFolderId());
 
-        return flashCard;
+        return createdCard;
     }
 
     // Get flash card by ID
@@ -83,9 +84,7 @@ public class FlashCardService {
         existingCard.setFrontText(updatedCard.getFrontText());
         existingCard.setBackText(updatedCard.getBackText());
 
-        flashCardDao.updateFlashCard(existingCard);
-
-        return existingCard;
+        return flashCardDao.updateFlashCard(existingCard);
     }
 
     // Delete flash card

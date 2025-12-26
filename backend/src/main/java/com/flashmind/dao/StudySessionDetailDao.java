@@ -4,8 +4,11 @@ import com.flashmind.model.StudySessionDetail;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
@@ -31,10 +34,24 @@ public class StudySessionDetailDao {
         }
     };
 
-    // Create a new study session detail
-    public int createDetail(StudySessionDetail detail) {
+    // Create a new study session detail - Returns the detail with generated ID
+    public StudySessionDetail createDetail(StudySessionDetail detail) {
         String sql = "INSERT INTO study_session_details (session_id, flashcard_id, is_correct, answered_at) VALUES (?, ?, ?, now())";
-        return jdbcTemplate.update(sql, detail.getSessionId(), detail.getFlashcardId(), detail.getIsCorrect());
+
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+
+        jdbcTemplate.update(connection -> {
+            PreparedStatement ps = connection.prepareStatement(sql, new String[]{"id"});
+            ps.setInt(1, detail.getSessionId());
+            ps.setInt(2, detail.getFlashcardId());
+            ps.setBoolean(3, detail.getIsCorrect());
+            return ps;
+        }, keyHolder);
+
+        Integer generatedId = keyHolder.getKey().intValue();
+
+        return findById(generatedId).orElseThrow(() ->
+                new RuntimeException("Failed to retrieve created study session detail"));
     }
 
     // Find study session detail by ID

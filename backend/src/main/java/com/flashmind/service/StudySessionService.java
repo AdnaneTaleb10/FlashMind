@@ -1,15 +1,18 @@
 package com.flashmind.service;
 
+import com.flashmind.dao.FlashCardDao;
 import com.flashmind.dao.FolderDao;
 import com.flashmind.dao.StudySessionDao;
 import com.flashmind.dao.StudySessionDetailDao;
-import com.flashmind.dao.UserDao;
+import com.flashmind.model.FlashCard;
 import com.flashmind.model.StudySession;
 import com.flashmind.model.StudySessionDetail;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class StudySessionService {
@@ -21,27 +24,58 @@ public class StudySessionService {
     private StudySessionDetailDao studySessionDetailDao;
 
     @Autowired
-    private UserDao userDao;
-
-    @Autowired
     private FolderDao folderDao;
 
-    // Create a new study session
-    public StudySession createStudySession(StudySession studySession) {
-        // Validate user exists
-        if (!userDao.findById(studySession.getUserId()).isPresent()) {
-            throw new IllegalArgumentException("User not found with id: " + studySession.getUserId());
+    @Autowired
+    private FlashCardDao flashCardDao;
+
+    // Start a new study session
+    public Map<String, Object> startStudySession(Integer userId, Integer folderId) {
+        // Validate folder exists
+        if (!folderDao.findById(folderId).isPresent()) {
+            throw new IllegalArgumentException("Folder not found with id: " + folderId);
         }
 
-        // Validate folder exists
-        if (!folderDao.findById(studySession.getFolderId()).isPresent()) {
-            throw new IllegalArgumentException("Folder not found with id: " + studySession.getFolderId());
+        // Get all flashcards in the folder
+        List<FlashCard> cards = flashCardDao.findByFolderId(folderId);
+
+        if (cards.isEmpty()) {
+            throw new IllegalArgumentException("This folder has no flashcards to study");
         }
 
         // Create study session
-        studySessionDao.createStudySession(studySession);
+        StudySession session = new StudySession();
+        session.setUserId(userId);
+        session.setFolderId(folderId);
 
-        return studySession;
+        StudySession createdSession = studySessionDao.createStudySession(session);
+
+        // Prepare response
+        Map<String, Object> response = new HashMap<>();
+        response.put("sessionId", createdSession.getId());
+        response.put("cards", cards);
+        response.put("totalCards", cards.size());
+
+        return response;
+    }
+
+    // End study session and save score
+    public Map<String, Object> endStudySession(Integer sessionId, Integer score) {
+        // Validate session exists
+        StudySession session = studySessionDao.findById(sessionId)
+                .orElseThrow(() -> new IllegalArgumentException("Study session not found with id: " + sessionId));
+
+        // Get total cards in session
+        int totalCards = flashCardDao.countByFolderId(session.getFolderId());
+
+        // Prepare response
+        Map<String, Object> response = new HashMap<>();
+        response.put("message", "Session saved successfully");
+        response.put("sessionId", sessionId);
+        response.put("score", score);
+        response.put("totalCards", totalCards);
+
+        return response;
     }
 
     // Get study session by ID
@@ -52,102 +86,46 @@ public class StudySessionService {
 
     // Get all study sessions for a user
     public List<StudySession> getUserStudySessions(Integer userId) {
-        // Validate user exists
-        if (!userDao.findById(userId).isPresent()) {
-            throw new IllegalArgumentException("User not found with id: " + userId);
-        }
-
         return studySessionDao.findByUserId(userId);
     }
 
-    // Get all study sessions for a folder
-    public List<StudySession> getFolderStudySessions(Integer folderId) {
-        // Validate folder exists
-        if (!folderDao.findById(folderId).isPresent()) {
-            throw new IllegalArgumentException("Folder not found with id: " + folderId);
-        }
-
-        return studySessionDao.findByFolderId(folderId);
-    }
-
-    // Get all study sessions
-    public List<StudySession> getAllStudySessions() {
-        return studySessionDao.findAll();
-    }
-
-    // Delete study session
-    public void deleteStudySession(Integer sessionId) {
-        // Check if session exists
-        getStudySessionById(sessionId);
-
-        // Delete all session details first
-        studySessionDetailDao.deleteBySessionId(sessionId);
-
-        // Delete the session
-        studySessionDao.deleteStudySession(sessionId);
-    }
-
-    // Get session count for a user
-    public int getUserSessionCount(Integer userId) {
-        return studySessionDao.countByUserId(userId);
-    }
-
-    // Get session count for a folder
-    public int getFolderSessionCount(Integer folderId) {
-        return studySessionDao.countByFolderId(folderId);
-    }
-
-    // Add a detail to a study session
-    public StudySessionDetail addSessionDetail(Integer sessionId, StudySessionDetail detail) {
-        // Validate session exists
-        getStudySessionById(sessionId);
-
-        detail.setSessionId(sessionId);
-        studySessionDetailDao.createDetail(detail);
-
-        return detail;
-    }
-
-    // Get all details for a session
+    // Get study session details
     public List<StudySessionDetail> getSessionDetails(Integer sessionId) {
-        // Validate session exists
-        getStudySessionById(sessionId);
-
         return studySessionDetailDao.findBySessionId(sessionId);
     }
 
-    // Get session statistics
-    public SessionStats getSessionStatistics(Integer sessionId) {
+    // Record answer for a flashcard
+    public StudySessionDetail recordAnswer(Integer sessionId, Integer flashcardId, Boolean isCorrect) {
         // Validate session exists
-        getStudySessionById(sessionId);
-
-        int totalAnswers = studySessionDetailDao.countBySessionId(sessionId);
-        int correctAnswers = studySessionDetailDao.countCorrectBySessionId(sessionId);
-        int incorrectAnswers = totalAnswers - correctAnswers;
-
-        double accuracy = totalAnswers > 0 ? (correctAnswers * 100.0 / totalAnswers) : 0;
-
-        return new SessionStats(totalAnswers, correctAnswers, incorrectAnswers, accuracy);
-    }
-
-    // Inner class for session statistics
-    public static class SessionStats {
-        private int totalAnswers;
-        private int correctAnswers;
-        private int incorrectAnswers;
-        private double accuracy;
-
-        public SessionStats(int totalAnswers, int correctAnswers, int incorrectAnswers, double accuracy) {
-            this.totalAnswers = totalAnswers;
-            this.correctAnswers = correctAnswers;
-            this.incorrectAnswers = incorrectAnswers;
-            this.accuracy = accuracy;
+        if (!studySessionDao.findById(sessionId).isPresent()) {
+            throw new IllegalArgumentException("Study session not found with id: " + sessionId);
         }
 
-        // Getters
-        public int getTotalAnswers() { return totalAnswers; }
-        public int getCorrectAnswers() { return correctAnswers; }
-        public int getIncorrectAnswers() { return incorrectAnswers; }
-        public double getAccuracy() { return accuracy; }
+        // Validate flashcard exists
+        if (!flashCardDao.findById(flashcardId).isPresent()) {
+            throw new IllegalArgumentException("Flashcard not found with id: " + flashcardId);
+        }
+
+        // Create detail
+        StudySessionDetail detail = new StudySessionDetail();
+        detail.setSessionId(sessionId);
+        detail.setFlashcardId(flashcardId);
+        detail.setIsCorrect(isCorrect);
+
+        return studySessionDetailDao.createDetail(detail);
+    }
+
+    // Get session score
+    public Map<String, Object> getSessionScore(Integer sessionId) {
+        int correctAnswers = studySessionDetailDao.countCorrectBySessionId(sessionId);
+        int totalAnswers = studySessionDetailDao.countBySessionId(sessionId);
+
+        Map<String, Object> score = new HashMap<>();
+        score.put("sessionId", sessionId);
+        score.put("correctAnswers", correctAnswers);
+        score.put("totalAnswers", totalAnswers);
+        score.put("percentage", totalAnswers > 0 ? (correctAnswers * 100.0 / totalAnswers) : 0);
+
+        return score;
     }
 }
