@@ -1,0 +1,171 @@
+/* ===== IMPORT POLICE ===== */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap');
+
+/* ===== RESET ===== */
+html, body, #root {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  font-family: 'Montserrat', sans-serif;
+}
+
+/* ===== CONTAINER PRINCIPAL ===== */
+.study-history-container {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: white;
+}
+
+/* ===== HEADER BLEU ===== */
+.blue-header {
+  background: #59AEF8;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 40px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.flash-mind-title {
+  color: white;
+  font-size: 32px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.white-icon {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+/* ===== CONTENU ===== */
+.content-wrapper-history {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+  padding: 40px 20px;
+}
+
+.history-card {
+  width: 900px;
+  background: white;
+  border-radius: 30px;
+  padding: 40px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  border: 2px solid #000;
+  position: relative;
+}
+
+.history-title {
+  text-align: center;
+  color: black;
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 65px;
+}
+
+/* ===== EN-TÊTES ===== */
+.table-header {
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 10px;
+  margin-bottom: 15px;
+}
+
+.header-cell {
+  font-weight: 600;
+  font-size: 18px;
+  color: #3A86FF;
+  flex: 1;
+  text-align: center; /* centrer les titres */
+}
+
+.folder-cell {
+  flex: 2;
+  text-align: left;
+  padding-left: 10px;
+}
+
+.percentage-cell,
+.revision-cell {
+  flex: 1;
+  text-align: center;
+}
+
+/* ===== TABLEAU ===== */
+.history-table {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.table-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+  gap: 10px; /* même espace entre colonnes */
+}
+
+.data-cell {
+  font-size: 16px;
+  color: black;
+  flex: 1;
+  text-align: center; /* alignement sous titre */
+}
+
+.data-cell.folder-cell {
+  flex: 2;
+  text-align: left;
+  padding-left: 10px;
+}
+
+/* ===== BOUTON ===== */
+.filter-button-container {
+  display: flex;
+  justify-content: flex-start; /* bas à gauche */
+  margin-top: 30px;
+}
+
+.filter-history-btn {
+  background: #59AEF8;
+  color: white;
+  border: none;
+  border-radius: 15px;
+  padding: 12px 30px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  transition: all 0.3s;
+}
+
+.filter-history-btn:hover {
+  background: #4A9DE6;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 950px) {
+  .history-card {
+    width: 95%;
+    padding: 30px;
+  }
+}
+
+@media (max-width: 480px) {
+  .history-card {
+    padding: 25px 20px;
+  }
+
+  .history-title {
+    font-size: 22px;
+  }
+}

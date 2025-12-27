@@ -1,0 +1,148 @@
+/* ===== FILTER POPUP - SIMPLE ET PROPRE ===== */
+
+/* Overlay */
+.filter-popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* Contenu du pop-up */
+.filter-popup-content {
+  background: white;
+  border-radius: 20px;
+  padding: 40px;
+  width: 600px;
+  position: relative;
+  border: 2px solid #000000;
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.2);
+}
+
+/* Titre avec croix à droite */
+.popup-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
+  position: relative;
+}
+
+.title-container {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: auto;
+}
+
+.popup-main-title {
+  color: black;
+  font-size: 24px;
+  font-weight: 600;
+  margin: 0;
+  font-family: 'Montserrat', sans-serif;
+  text-align: center;
+  white-space: nowrap;
+}
+
+/* Croix noire à droite du titre */
+.close-x-btn {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: black;
+  padding: 5px;
+  line-height: 1;
+  margin-left: auto; /* Pousse la croix à droite */
+}
+
+.close-x-btn:hover {
+  opacity: 0.7;
+}
+
+/* Container pour les boutons et texte */
+.filter-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+}
+
+/* Boutons de filtre */
+.filter-option-btn {
+  background: #3A86FF;
+  color: white;
+  border: none;
+  border-radius: 15px;
+
+  width: 300px;          /* largeur du bouton */
+  max-width: 80%;
+  padding: 16px 0;       /* espace vertical */
+  
+  font-size: 18px;
+  font-weight: 600;
+  font-family: 'Montserrat', sans-serif;
+
+  cursor: pointer;
+
+  /* CENTRAGE */
+  display: flex;          /* transforme le bouton en flexbox */
+  justify-content: center; /* centre horizontalement */
+  align-items: center;     /* centre verticalement */
+  text-align: center;      /* pour sécurité */
+}
+
+
+.filter-option-btn:hover {
+  background: #2A76EF;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(58, 134, 255, 0.4);
+}
+
+/* Texte "Filter By:" aligné à gauche maximum */
+.filter-by-text {
+  color: black;
+  font-size: 18px;
+  font-weight: 600;
+  font-family: 'Montserrat', sans-serif;
+  width: 100%; /* Prend toute la largeur */
+  text-align: left; /* Aligné à gauche */
+  padding-left: 20px; /* Décalage minimum */
+  margin: 10px 0;
+  box-sizing: border-box;
+}
+
+/* Responsive */
+@media (max-width: 500px) {
+  .filter-popup-content {
+    width: 90%;
+    padding: 30px 25px;
+  }
+  
+  .popup-main-title {
+    font-size: 22px;
+  }
+  
+  .filter-option-btn {
+    width: 250px;
+    padding: 14px 0;
+    font-size: 16px;
+  }
+  
+  .filter-by-text {
+    padding-left: 5px;
+    font-size: 16px;
+  }
+  
+  .close-x-btn {
+    font-size: 18px;
+  }
+}
