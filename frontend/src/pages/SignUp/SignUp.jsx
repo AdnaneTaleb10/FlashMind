@@ -2,8 +2,30 @@ import React from 'react';
 import "./SignUp.css";
 import photo from '../../assets/photo.png';
 import SignUpForm from '../../components/SignUpForm/SignUpForm';
+import { useNavigate } from 'react-router-dom';
 
-function SignUp({ onSignup, onSwitchToLogin }) {
+function SignUp() {  // Remove onSwitchToLogin prop
+  const navigate = useNavigate();
+
+  const handleSignupSuccess = (response) => {
+    // This function will be called when registration is successful
+    console.log('Signup successful, user data:', response);
+    
+    // Optional: Store user data or token
+    if (response.token) {
+      localStorage.setItem('authToken', response.token);
+    }
+    
+    // Redirect to dashboard after successful registration
+    setTimeout(() => {
+      navigate('/dashboard');
+    }, 1500); // Small delay to let user see the success toast
+  };
+
+  const handleSwitchToLogin = () => {
+    navigate('/signin');
+  };
+
   return (
     <div className="signup-container-signup">
       <div className="left-panel-signup">
@@ -21,12 +43,12 @@ function SignUp({ onSignup, onSwitchToLogin }) {
             <h2 className="form-title-signup">SIGN UP</h2>
           </div>
 
-          <SignUpForm onSignup={onSignup} />
+          <SignUpForm onSignup={handleSignupSuccess} />
 
           <div className="form-footer-signup">
             <p className="footer-text-signup">Already have an account?</p>
             <button 
-              onClick={onSwitchToLogin} 
+              onClick={handleSwitchToLogin} 
               className="switch-button-signup"
             >
               Log In
