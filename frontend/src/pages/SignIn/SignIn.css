@@ -3,49 +3,54 @@
 
 /* Appliquer Montserrat à tous les éléments de la page SignIn */
 body, html, #root, .login-container-login, .login-container-login * {
-    font-family: 'Montserrat', sans-serif;
+  font-family: 'Montserrat', sans-serif;
 }
 
 .login-container-login {
   display: flex;
   width: 100%;
-  height: 100vh;
+  min-height: 100vh;
   background: white;
-  overflow: hidden;
+  overflow-x: hidden;
 }
 
 /* Panneau gauche - centré et équilibré */
 .left-panel-login {
-  flex: 0.5;
+  flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 40px;
+  padding: 60px 40px;
+  transition: all 0.3s ease;
 }
 
 .brand-header-login {
-  margin-bottom: 30px;
+  margin-bottom: 40px;
   width: 100%;
   text-align: left;
+  max-width: 580px;
 }
 
 .brand-title-login {
   color: black;
-  font-size: 32px;
+  font-size: clamp(24px, 4vw, 32px);
   font-weight: bold;
   letter-spacing: 1.5px;
   margin: 0;
   font-family: 'Montserrat', sans-serif;
+  transition: font-size 0.3s ease;
 }
 
 .image-container-login {
   width: 100%;
   max-width: 580px;
-  height: 580px;
+  height: auto;
+  aspect-ratio: 1;
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: all 0.3s ease;
 }
 
 .side-image-login {
@@ -57,17 +62,18 @@ body, html, #root, .login-container-login, .login-container-login * {
 
 /* Panneau droit - aligné avec le gauche */
 .right-panel-login {
-  flex: 0.5;
+  flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 40px;
+  padding: 60px 40px;
+  transition: all 0.3s ease;
 }
 
 /* Carte formulaire */
 .form-card-login {
-  width: 420px;
-  height: 400px;
+  width: 100%;
+  max-width: 420px;
   background: #D9D9D9;
   border-radius: 50px;
   padding: 40px 35px;
@@ -76,6 +82,7 @@ body, html, #root, .login-container-login, .login-container-login * {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  transition: all 0.3s ease;
 }
 
 /* En-tête formulaire */
@@ -85,10 +92,11 @@ body, html, #root, .login-container-login, .login-container-login * {
 }
 
 .form-title-login {
-  font-size: 28px;
+  font-size: clamp(22px, 3vw, 28px);
   font-weight: bold;
   margin-bottom: 20px;
   color: black;
+  transition: font-size 0.3s ease;
 }
 
 /* Footer */
@@ -98,7 +106,7 @@ body, html, #root, .login-container-login, .login-container-login * {
 }
 
 .footer-text-login {
-  font-size: 14px;
+  font-size: clamp(13px, 1.5vw, 14px);
   color: black;
   margin-bottom: 10px;
 }
@@ -109,10 +117,11 @@ body, html, #root, .login-container-login, .login-container-login * {
   color: #59AEF8;
   font-weight: bold;
   cursor: pointer;
-  font-size: 15px;
+  font-size: clamp(14px, 1.5vw, 15px);
   padding: 5px 10px;
   outline: none;
   box-shadow: none;
+  transition: all 0.2s ease;
 }
 
 /* ÉTATS INTERACTIFS — AUCUN CADRE */
@@ -125,44 +134,128 @@ body, html, #root, .login-container-login, .login-container-login * {
   box-shadow: none !important;
   background: none;
   color: #59AEF8;
+  transform: scale(1.05);
 }
 
-/* Responsive */
+/* Tablettes et écrans moyens (≤1200px) */
 @media (max-width: 1200px) {
   .login-container-login {
     flex-direction: column;
-    height: auto;
-    min-height: 100vh;
   }
-  
+
   .left-panel-login,
   .right-panel-login {
-    flex: 1;
-    padding: 30px;
+    padding: 40px 30px;
   }
-  
+
+  .brand-header-login {
+    text-align: center;
+    margin-bottom: 30px;
+  }
+
   .image-container-login {
-    max-width: 350px;
-    height: 400px;
+    max-width: 450px;
   }
-  
+
   .form-card-login {
-    width: 350px;
-    height: 450px;
-    padding: 35px 30px;
+    max-width: 450px;
   }
 }
 
+/* Tablettes petites (≤900px) */
 @media (max-width: 900px) {
+  .left-panel-login,
+  .right-panel-login {
+    padding: 30px 20px;
+  }
+
+  .image-container-login {
+    max-width: 350px;
+  }
+
+  .form-card-login {
+    max-width: 380px;
+    padding: 35px 30px;
+    border-radius: 40px;
+  }
+}
+
+/* Mobiles (≤640px) */
+@media (max-width: 640px) {
+  .login-container-login {
+    min-height: 100vh;
+  }
+
+  .left-panel-login {
+    padding: 30px 20px 20px;
+  }
+
+  .right-panel-login {
+    padding: 20px 20px 40px;
+  }
+
+  .brand-header-login {
+    margin-bottom: 20px;
+  }
+
   .image-container-login {
     max-width: 280px;
-    height: 320px;
   }
-  
+
   .form-card-login {
-    width: 280px;
-    height: 380px;
+    max-width: 340px;
+    padding: 30px 25px;
+    border-radius: 35px;
+  }
+
+  .form-title-login {
+    margin-bottom: 15px;
+  }
+
+  .form-footer-login {
+    margin-top: 20px;
+  }
+}
+
+/* Très petits mobiles (≤400px) */
+@media (max-width: 400px) {
+  .left-panel-login,
+  .right-panel-login {
+    padding: 20px 15px;
+  }
+
+  .image-container-login {
+    max-width: 240px;
+  }
+
+  .form-card-login {
+    max-width: 300px;
     padding: 25px 20px;
-    border-radius: 40px;
+    border-radius: 30px;
+  }
+
+  .brand-title-login {
+    letter-spacing: 1px;
+  }
+}
+
+/* Landscape mobile (petite hauteur) */
+@media (max-height: 600px) and (orientation: landscape) {
+  .login-container-login {
+    flex-direction: row;
+  }
+
+  .left-panel-login {
+    display: none; /* Cache l'image en mode paysage sur mobile */
+  }
+
+  .right-panel-login {
+    flex: 1;
+    padding: 20px;
+  }
+
+  .form-card-login {
+    max-width: 400px;
+    padding: 25px 30px;
   }
 }
