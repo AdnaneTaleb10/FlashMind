@@ -1,33 +1,50 @@
-.study-header {
-  background: #4a90e2;
-  color: white;
-  padding: 15px;
-  display: flex;
-  justify-content: space-between;
+.study-container {
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 40px 20px;
 }
 
-.close {
-  color: red;
+.study-card {
+  background: white;
+  border: 2px solid #3b82f6;
+  border-radius: 12px;
+  padding: 40px;
+  position: relative;
+}
+
+.close-button {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: none;
+  border: none;
   cursor: pointer;
+  padding: 5px;
 }
 
-.card, .folder-card {
-  max-width: 600px;
-  margin: 50px auto;
-  padding: 30px;
-  border: 2px solid #4a90e2;
-  border-radius: 15px;
+.study-header {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 40px;
+  color: #1f2937;
+}
+
+.study-content {
+  text-align: center;
+  font-size: 18px;
+  color: #1f2937;
+  margin-bottom: 80px;
+  min-height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.study-footer {
   text-align: center;
 }
 
-button {
-  background: #4a90e2;
-  color: white;
-  border: none;
-  padding: 10px 16px;
-  border-radius: 8px;
-  margin: 5px;
+.btn-large {
+  padding: 12px 32px;
+  font-size: 15px;
 }
-
-.correct { background: #27ae60; }
-.wrong { background: #e74c3c; }

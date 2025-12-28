@@ -1,86 +1,89 @@
-import React, { useState } from "react";
-import { useSearchParams, useNavigate } from "react-router-dom";
-import "./FolderView.css";
+import { useState } from 'react';
+import { Folder, CreditCard, ArrowLeft } from 'lucide-react';
+import './FolderView.css';
 
-const FolderView = () => {
-  const [searchParams] = useSearchParams();
-  const navigate = useNavigate();
-  const folder = searchParams.get("folder");
+const FolderView = ({ onNavigate, onOpenModal }) => {
+  const [selectedFolder, setSelectedFolder] = useState(null);
+  
+  const folders = [
+    { id: 1, name: 'French', cards: [
+      { id: 1, date: '2025/11/24' },
+      { id: 2, date: '2025/11/24' },
+      { id: 3, date: '2025/11/24' },
+      { id: 4, date: '2025/11/24' }
+    ]},
+    { id: 2, name: 'Computer Science', cards: [
+      { id: 1, date: '2025/11/24' },
+      { id: 2, date: '2025/11/24' }
+    ]}
+  ];
 
-  const [isFlashcardModalOpen, setIsFlashcardModalOpen] = useState(false);
-
-  const flashcards = {
-    french: [
-      { id: 1, q: "Bonjour", a: "Hello" },
-      { id: 2, q: "Merci", a: "Thank you" }
-    ],
-    math: [
-      { id: 1, q: "2 + 2", a: "4" },
-      { id: 2, q: "5 × 3", a: "15" }
-    ]
+  const handleAddFlashcard = () => {
+    if (!selectedFolder) {
+      alert('Please select a folder first');
+      return;
+    }
+    onOpenModal('createFlashcard');
   };
 
+  const currentFolder = selectedFolder || folders[0];
+
   return (
-    <div className="folder-view">
-      <header className="header">
-        <h1>FLASH MIND</h1>
-      </header>
+    <div className="folder-view-container">
+      <div className="folder-selector">
+        <label className="folder-selector-label">Select Folder:</label>
+        <select 
+          className="folder-select"
+          value={selectedFolder?.id || ''}
+          onChange={(e) => {
+            const folder = folders.find(f => f.id === parseInt(e.target.value));
+            setSelectedFolder(folder);
+          }}
+        >
+          <option value="">Choose a folder...</option>
+          {folders.map(folder => (
+            <option key={folder.id} value={folder.id}>{folder.name}</option>
+          ))}
+        </select>
+      </div>
 
-      <div className="folder-content">
-        <h2>Folders</h2>
-
-        <div className="folders">
-          <button onClick={() => navigate("/folder-view?folder=french")}>
-            📁 French
-          </button>
-          <button onClick={() => navigate("/folder-view?folder=math")}>
-            📁 Math
-          </button>
+      <div className="folder-view-card">
+        <div className="folder-view-header">
+          <Folder size={24} color="#3b82f6" />
+          <h3 className="folder-view-title">{currentFolder.name}</h3>
         </div>
 
-        <div className="flashcards-section">
-          <h3>
-            {folder ? `Flashcards in "${folder}"` : "Select a folder"}
-          </h3>
-
-          {folder && (
-            <div className="flashcards">
-              {flashcards[folder]?.map((c) => (
-                <div key={c.id} className="card">
-                  <strong>{c.q}</strong>
-                  <p>{c.a}</p>
-                </div>
-              ))}
+        {currentFolder.cards.map((card, index) => (
+          <div key={card.id} className={`card-item ${index === currentFolder.cards.length - 1 ? 'no-border' : ''}`}>
+            <div className="card-info">
+              <CreditCard size={18} color="#6b7280" />
+              <span className="card-name">Card {card.id}</span>
             </div>
-          )}
-        </div>
-
-        <div className="actions">
-          <button
-            disabled={!folder}
-            className={!folder ? "disabled" : ""}
-            onClick={() => setIsFlashcardModalOpen(true)}
-          >
-            + Add Flashcard
-          </button>
-
-          <button onClick={() => navigate("/study-question")}>
-            ▶ Start Study
-          </button>
-        </div>
-
-        {isFlashcardModalOpen && (
-          <div className="modal">
-            <div className="modal-box">
-              <h3>Create Flashcard</h3>
-              <input placeholder="Question" />
-              <input placeholder="Answer" />
-              <button onClick={() => setIsFlashcardModalOpen(false)}>
-                Save
-              </button>
+            
+            <div className="card-actions">
+              <span className="card-date">{card.date}</span>
+              
+              <button className="btn btn-primary">Edit</button>
+              
+              <button className="btn btn-danger">Delete</button>
             </div>
           </div>
-        )}
+        ))}
+
+        <div className="folder-view-footer">
+          <button 
+            onClick={() => onNavigate('dashboard')}
+            className="btn btn-secondary">
+            <ArrowLeft size={16} />
+            Back
+          </button>
+          
+          <button 
+            onClick={handleAddFlashcard}
+            className={`btn btn-primary ${!selectedFolder ? 'btn-disabled' : ''}`}>
+            + Add Flashcard
+          </button>
+        </div>
       </div>
     </div>
   );

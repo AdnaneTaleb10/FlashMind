@@ -1,118 +1,107 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import "./Dashboard.css";
+import { CreditCard, Folder } from 'lucide-react';
+import './Dashboard.css';
 
-import CreateFolderModal from "../../components/modals/CreateFolderModal/CreateFolderModal";
-import CreateFlashcardModal from "../../components/modals/CreateFlashcardModal/CreateFlashcardModal";
-import FilterHistoryModal from "../../components/modals/FilterHistoryModal/FilterHistoryModal";
+const Dashboard = ({ onNavigate, onOpenModal }) => {
+  const folders = [
+    { id: 1, name: 'Computer Science', cards: 12 },
+    { id: 2, name: 'Math', cards: 15 }
+  ];
 
-function Dashboard() {
-  const navigate = useNavigate();
-
-  const [folders, setFolders] = useState([
-    { id: 1, name: "Computer Science", flashcardCount: 12 },
-    { id: 2, name: "Math", flashcardCount: 15 }
-  ]);
-
-  const [flashcards, setFlashcards] = useState([]);
-
-  const [isFolderModalOpen, setIsFolderModalOpen] = useState(false);
-  const [isFlashcardModalOpen, setIsFlashcardModalOpen] = useState(false);
-  const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
-
-  const handleCreateFolder = (folderName) => {
-    const newFolder = {
-      id: Date.now(),
-      name: folderName,
-      flashcardCount: 0
-    };
-    setFolders([...folders, newFolder]);
-  };
-
-  const handleCreateFlashcard = (flashcard) => {
-    const newFlashcard = {
-      id: Date.now(),
-      ...flashcard
-    };
-    setFlashcards([...flashcards, newFlashcard]);
-  };
+  const studySessions = [
+    { subject: 'French', percentage: 85, time: '1 hour ago', color: '#22c55e' },
+    { subject: 'Math', percentage: 65, time: '3 hours ago', color: '#eab308' },
+    { subject: 'Computer Science', percentage: 45, time: '18 hours ago', color: '#ef4444' }
+  ];
 
   return (
-    <div className="dashboard">
-      <header className="dashboard-header">
-        <h1>FLASH MIND</h1>
-        <div className="user-icon">👤</div>
-      </header>
+    <div className="dashboard-container">
+      <h2 className="dashboard-title">Your Space</h2>
 
-      <div className="dashboard-container">
-        <h2>Your Space</h2>
-
-        <div className="stats">
-          <div className="stat-card">
-            {flashcards.length}<br />Flashcards
+      <div className="stats-cards">
+        <div className="stat-card">
+          <div className="stat-header">
+            <CreditCard size={20} color="#3b82f6" />
+            <span className="stat-number">42</span>
           </div>
-          <div className="stat-card">
-            {folders.length}<br />Folders
-          </div>
+          <div className="stat-label">Flashcards</div>
         </div>
 
-        <div className="box">
-          <h3>Your Folders</h3>
+        <div className="stat-card">
+          <div className="stat-header">
+            <Folder size={20} color="#3b82f6" />
+            <span className="stat-number">6</span>
+          </div>
+          <div className="stat-label">Folders</div>
+        </div>
+      </div>
 
-          {folders.map((f) => (
-            <div key={f.id} className="folder-row">
-              <span>📁 {f.name}</span>
-              <span>{f.flashcardCount} Cards</span>
-              <button onClick={() => navigate(`/study-question?subject=${f.name}`)}>study</button>
-              <button onClick={() => navigate(`/folder-view?folder=${f.name}`)}>Edit</button>
-              <button>Delete</button>
+      <div className="section-card">
+        <h3 className="section-title">Your Folders</h3>
+
+        {folders.map((folder, index) => (
+          <div key={folder.id} className={`folder-item ${index === folders.length - 1 ? 'no-border' : ''}`}>
+            <div className="folder-info">
+              <Folder size={20} color="#6b7280" />
+              <span className="folder-name">{folder.name}</span>
             </div>
-          ))}
-
-          <div className="box-actions">
-            <button onClick={() => navigate("/folder-view?folder=" + folders[0].name)}>
-              Show Folders
-            </button>
-            <button onClick={() => setIsFolderModalOpen(true)}>
-              Create Folder
-            </button>
+            
+            <div className="folder-actions">
+              <span className="folder-cards">{folder.cards} Cards</span>
+              
+              <button 
+                onClick={() => onNavigate('studyQuestion', folder)}
+                className="btn btn-primary">
+                study
+              </button>
+              
+              <button className="btn btn-primary">Edit</button>
+              
+              <button className="btn btn-primary">Delete</button>
+            </div>
           </div>
-        </div>
+        ))}
 
-        <div className="box">
-          <h3>Recent Study Sessions</h3>
-
-          <div className="session-row">
-            <span className="dot green"></span> French <span>85%</span> <span>1 hour ago</span>
-          </div>
-
-          <button onClick={() => setIsFilterModalOpen(true)}>
-            Show History
+        <div className="section-footer">
+          <button 
+            onClick={() => onNavigate('folderView')}
+            className="btn btn-primary">
+            Show Folders
+          </button>
+          
+          <button 
+            onClick={() => onOpenModal('createFolder')}
+            className="btn btn-primary">
+            Create Folder
           </button>
         </div>
       </div>
 
-      {/* Modals */}
-      <CreateFolderModal
-        isOpen={isFolderModalOpen}
-        onClose={() => setIsFolderModalOpen(false)}
-        onCreateFolder={handleCreateFolder}
-      />
+      <div className="section-card">
+        <h3 className="section-title">Recent Study Sessions</h3>
 
-      <CreateFlashcardModal
-        isOpen={isFlashcardModalOpen}
-        onClose={() => setIsFlashcardModalOpen(false)}
-        onCreateFlashcard={handleCreateFlashcard}
-      />
+        {studySessions.map((session, index) => (
+          <div key={index} className={`session-item ${index === studySessions.length - 1 ? 'no-border' : ''}`}>
+            <div className="session-info">
+              <div className="session-dot" style={{ background: session.color }}></div>
+              <span className="session-subject">{session.subject}</span>
+            </div>
+            
+            <span className="session-percentage">{session.percentage}%</span>
+            
+            <span className="session-time">{session.time}</span>
+          </div>
+        ))}
 
-      <FilterHistoryModal
-        isOpen={isFilterModalOpen}
-        onClose={() => setIsFilterModalOpen(false)}
-        onApplyFilter={(f) => console.log(f)}
-        folders={folders}
-      />
+        <div className="section-footer-center">
+          <button 
+            onClick={() => onNavigate('studyHistory')}
+            className="btn btn-primary">
+            Show History
+          </button>
+        </div>
+      </div>
     </div>
   );
-}
+};
 
 export default Dashboard;

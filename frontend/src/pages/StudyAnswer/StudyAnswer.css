@@ -1,33 +1,54 @@
-.study-header {
-  background: #4a90e2;
-  color: white;
-  padding: 15px;
-  display: flex;
-  justify-content: space-between;
+.answer-container {
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 40px 20px;
 }
 
-.close {
-  color: red;
-  cursor: pointer;
+.answer-card {
+  background: white;
+  border: 2px solid #3b82f6;
+  border-radius: 12px;
+  padding: 40px;
+  position: relative;
 }
 
-.card, .folder-card {
-  max-width: 600px;
-  margin: 50px auto;
-  padding: 30px;
-  border: 2px solid #4a90e2;
-  border-radius: 15px;
+.answer-header {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 40px;
+  color: #1f2937;
+}
+
+.answer-content {
   text-align: center;
+  font-size: 18px;
+  color: #1f2937;
+  margin-bottom: 60px;
+  min-height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-button {
-  background: #4a90e2;
+.answer-actions {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.answer-buttons {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+}
+
+.btn-success {
+  background: #22c55e;
   color: white;
-  border: none;
-  padding: 10px 16px;
-  border-radius: 8px;
-  margin: 5px;
+  padding: 10px 24px;
 }
 
-.correct { background: #27ae60; }
-.wrong { background: #e74c3c; }
+.btn-error {
+  background: #ef4444;
+  color: white;
+  padding: 10px 24px;
+}

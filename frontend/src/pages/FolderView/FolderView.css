@@ -1,76 +1,125 @@
-.folder-view {
-  min-height: 100vh;
-  background: #f4f6fb;
-}
-
-.header {
-  background: #4a90e2;
-  padding: 20px;
-  color: white;
-  text-align: center;
-}
-
-.folder-content {
-  padding: 30px;
+.folder-view-container {
   max-width: 900px;
-  margin: auto;
+  margin: 0 auto;
+  padding: 40px 20px;
 }
 
-.folders button {
-  margin: 10px;
-  padding: 15px;
+.folder-selector {
   background: white;
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
-  font-weight: bold;
-}
-
-.flashcards {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  border: 2px solid #3b82f6;
+  border-radius: 12px;
+  padding: 20px 30px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
   gap: 15px;
 }
 
-.card {
-  background: white;
-  padding: 15px;
-  border-radius: 10px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+.folder-selector-label {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1f2937;
 }
 
-.actions {
-  margin-top: 30px;
-  display: flex;
-  gap: 20px;
-}
-
-.actions button {
-  padding: 15px 20px;
-  border: none;
-  background: #4a90e2;
-  color: white;
-  border-radius: 8px;
+.folder-select {
+  flex: 1;
+  padding: 10px 15px;
+  border: 2px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 15px;
+  color: #1f2937;
   cursor: pointer;
-}
-
-.actions .disabled {
-  background: #ccc;
-  cursor: not-allowed;
-}
-
-.modal {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.4);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.modal-box {
   background: white;
+}
+
+.folder-select:focus {
+  outline: none;
+  border-color: #3b82f6;
+}
+
+.folder-view-card {
+  background: white;
+  border: 2px solid #3b82f6;
+  border-radius: 12px;
   padding: 30px;
-  border-radius: 10px;
-  width: 300px;
+}
+
+.folder-view-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 30px;
+}
+
+.folder-view-title {
+  color: #1f2937;
+  font-size: 20px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.card-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px 0;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.card-item.no-border {
+  border-bottom: none;
+}
+
+.card-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+}
+
+.card-name {
+  font-size: 15px;
+  color: #1f2937;
+  font-weight: 500;
+}
+
+.card-actions {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.card-date {
+  font-size: 14px;
+  color: #6b7280;
+  min-width: 100px;
+}
+
+.btn-danger {
+  background: #ef4444;
+  color: white;
+}
+
+.btn-secondary {
+  background: white;
+  color: #3b82f6;
+  border: 2px solid #3b82f6;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.folder-view-footer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 25px;
+}
+
+.folder-view-footer .btn {
+  padding: 10px 24px;
+}
+
+.btn-disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }

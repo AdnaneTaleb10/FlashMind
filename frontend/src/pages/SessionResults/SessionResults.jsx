@@ -1,39 +1,35 @@
-import React from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-import "./SessionResults.css";
+import { X } from 'lucide-react';
+import './SessionResults.css';
 
-const SessionResults = () => {
-  const navigate = useNavigate();
-  const location = useLocation();
-
-  const { correct = 0, wrong = 0 } = location.state || {};
-  const total = correct + wrong;
-  const score = total === 0 ? 0 : Math.round((correct / total) * 100);
-
+const SessionResults = ({ onNavigate }) => {
   return (
-    <div className="session-results">
-      <header className="app-header">
-        <h1>FLASH MIND</h1>
-      </header>
+    <div className="results-container">
+      <div className="results-card">
+        <button 
+          onClick={() => onNavigate('dashboard')}
+          className="close-button">
+          <X size={24} color="#1f2937" />
+        </button>
 
-      <main className="results-content">
-        <h2>Session Completed</h2>
+        <h3 className="results-title">Session Completed</h3>
 
-        <div className="stats">
-          <div>Score: {score}%</div>
-          <div>Correct: {correct}</div>
-          <div>Wrong: {wrong}</div>
+        <div className="results-message">Great Job !</div>
+
+        <div className="results-stats">
+          <div className="result-item">
+            <span className="result-icon">🎯</span>
+            <span className="result-label">Score: <strong>85%</strong></span>
+          </div>
+          <div className="result-item">
+            <span className="result-icon">✓</span>
+            <span className="result-label">Correct answers : <strong>15</strong></span>
+          </div>
+          <div className="result-item">
+            <span className="result-icon">✕</span>
+            <span className="result-label">Wrong answers : <strong>4</strong></span>
+          </div>
         </div>
-
-        <div className="actions">
-          <button onClick={() => navigate("/study-question")}>
-            New Session
-          </button>
-          <button onClick={() => navigate("/dashboard")}>
-            Back to Dashboard
-          </button>
-        </div>
-      </main>
+      </div>
     </div>
   );
 };
