@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { User } from 'lucide-react';
 import Dashboard from './pages/Dashboard/Dashboard';
 import FolderView from './pages/FolderView/FolderView';
+import FolderDetails from './pages/FolderDetails/FolderDetails';
 import StudyQuestion from './pages/StudyQuestion/StudyQuestion';
 import StudyAnswer from './pages/StudyAnswer/StudyAnswer';
 import StudyHistory from './pages/StudyHistory/StudyHistory';
@@ -35,12 +36,14 @@ const App = () => {
         return <Dashboard onNavigate={handleNavigate} onOpenModal={handleOpenModal} />;
       case 'folderView':
         return <FolderView onNavigate={handleNavigate} onOpenModal={handleOpenModal} />;
+      case 'folderDetails':
+        return <FolderDetails onNavigate={handleNavigate} onOpenModal={handleOpenModal} folder={selectedFolder} />;
       case 'studyQuestion':
         return <StudyQuestion onNavigate={handleNavigate} folder={selectedFolder} />;
       case 'studyAnswer':
         return <StudyAnswer onNavigate={handleNavigate} folder={selectedFolder} />;
       case 'studyHistory':
-  return <StudyHistory onNavigate={handleNavigate} onOpenModal={handleOpenModal} />;
+        return <StudyHistory onNavigate={handleNavigate} onOpenModal={handleOpenModal} />;
       case 'sessionResults':
         return <SessionResults onNavigate={handleNavigate} />;
       default:

@@ -1,37 +1,36 @@
-.folder-view-container {
+.folder-details-container {
   max-width: 600px;
   margin: 0 auto;
   padding: 40px 20px;
 }
 
-.folder-view-card {
+.folder-details-card {
   background: white;
   border: 2px solid #1f2937;
   border-radius: 12px;
   padding: 30px;
 }
 
-.folder-view-header {
+.folder-details-header {
   display: flex;
   align-items: center;
   gap: 12px;
   margin-bottom: 30px;
-  justify-content: center;
 }
 
-.folder-view-title {
+.folder-details-title {
   color: #1f2937;
   font-size: 20px;
   font-weight: 600;
   margin: 0;
 }
 
-.folders-list {
+.cards-list {
   display: flex;
   flex-direction: column;
 }
 
-.folder-row {
+.card-item {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -39,39 +38,30 @@
   border-bottom: 1px solid #e5e7eb;
 }
 
-.folder-row.no-border {
+.card-item.no-border {
   border-bottom: none;
 }
 
-.folder-info-clickable {
+.card-info {
   display: flex;
   align-items: center;
   gap: 12px;
   flex: 1;
-  cursor: pointer;
-  padding: 5px 8px;
-  margin: -5px -8px;
-  border-radius: 6px;
-  transition: background 0.2s;
 }
 
-.folder-info-clickable:hover {
-  background: #f3f4f6;
-}
-
-.folder-name {
+.card-name {
   font-size: 15px;
   color: #1f2937;
   font-weight: 500;
 }
 
-.folder-actions {
+.card-actions {
   display: flex;
   align-items: center;
   gap: 15px;
 }
 
-.folder-date {
+.card-date {
   font-size: 14px;
   color: #6b7280;
   min-width: 100px;
@@ -124,12 +114,12 @@
   background: #eff6ff;
 }
 
-.folder-view-footer {
+.folder-details-footer {
   display: flex;
-  justify-content: flex-start;
+  justify-content: space-between;
   margin-top: 25px;
 }
 
-.folder-view-footer .btn {
+.folder-details-footer .btn {
   padding: 10px 24px;
 }
