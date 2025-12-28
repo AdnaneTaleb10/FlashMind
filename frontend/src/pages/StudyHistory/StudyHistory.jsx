@@ -1,6 +1,7 @@
+import { X } from 'lucide-react';
 import './StudyHistory.css';
 
-const StudyHistory = ({ onOpenModal }) => {
+const StudyHistory = ({ onNavigate, onOpenModal }) => {
   const studySessions = [
     { subject: 'French', percentage: 85, time: '1 hour ago', color: '#22c55e' },
     { subject: 'Math', percentage: 65, time: '3 hours ago', color: '#eab308' },
@@ -10,6 +11,12 @@ const StudyHistory = ({ onOpenModal }) => {
   return (
     <div className="history-container">
       <div className="history-card">
+        <button 
+          onClick={() => onNavigate('dashboard')}
+          className="close-button">
+          <X size={24} color="#1f2937" />
+        </button>
+
         <h3 className="history-title">Study History</h3>
 
         <div className="history-table-header">

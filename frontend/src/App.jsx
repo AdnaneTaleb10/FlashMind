@@ -40,7 +40,7 @@ const App = () => {
       case 'studyAnswer':
         return <StudyAnswer onNavigate={handleNavigate} folder={selectedFolder} />;
       case 'studyHistory':
-        return <StudyHistory onOpenModal={handleOpenModal} />;
+  return <StudyHistory onNavigate={handleNavigate} onOpenModal={handleOpenModal} />;
       case 'sessionResults':
         return <SessionResults onNavigate={handleNavigate} />;
       default:
