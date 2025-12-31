@@ -1,88 +1,69 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useMemo } from 'react';
+import { X } from 'lucide-react';
 import './StudyHistory.css';
-import FilterPopup from '../../components/FilterPopup/FilterPopup'; 
+import { getTimeAgo } from '../../utils/helpers';  // 🆕 AJOUTER
 
-function StudyHistory() {
-  const navigate = useNavigate(); // navigation vers UserInfo
-  const historyData = [
-    { folder: 'French', percentage: '85%', lastRevision: '1 hour ago' },
-    { folder: 'Math', percentage: '65%', lastRevision: '3 hours ago' },
-    { folder: 'Computer Science', percentage: '45%', lastRevision: '18 hours ago' },
-  ];
 
-  // État du pop-up
-  const [showFilterPopup, setShowFilterPopup] = useState(false);
-
-  // Ouvrir le pop-up
-  const openFilterPopup = () => setShowFilterPopup(true);
-
-  // Fermer le pop-up
-  const closeFilterPopup = () => setShowFilterPopup(false);
-
-  // Appliquer le filtre
-  const handleApplyFilter = () => {
-    console.log('Filtre appliqué !');
-  };
+const StudyHistory = ({ sessions, onNavigate, onOpenModal, filterType}) => {
+  const sortedSessions = useMemo(() => {
+    let sorted = [...sessions];
+    if (filterType === 'percentage') {
+      sorted.sort((a, b) => b.percentage - a.percentage);
+    } else if (filterType === 'folder') {
+      sorted.sort((a, b) => a.folderName.localeCompare(b.folderName));
+    } else {
+      sorted.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+    }
+    return sorted;
+  }, [sessions, filterType]);
 
   return (
-    <div className="study-history-container">
-      {/* Header bleu */}
-      <div className="blue-header">
-        <h1 className="flash-mind-title">FLASH MIND</h1>
+    <div className="history-container">
+      <div className="history-card">
+        <button onClick={() => onNavigate('dashboard')} className="close-button">
+          <X size={24} color="#1f2937" />
+        </button>
 
-        {/* Logo blanc → ouvre UserInfo */}
-        <span
-          className="white-icon"
-          onClick={() => navigate('/userinfo')}
-          style={{ cursor: 'pointer' }}
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="28" height="28">
-            <path d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5zm0 2c-3.3 0-10 1.7-10 5v3h20v-3c0-3.3-6.7-5-10-5z"/>
-          </svg>
-        </span>
-      </div>
+        <h3 className="history-title">Study History</h3>
 
-      {/* Contenu principal */}
-      <div className="content-wrapper-history">
-        <div className="history-card">
-          <h2 className="history-title">Study History</h2>
+        <div className="history-table-header">
+          <span className="header-folder">Folder's name</span>
+          <span className="header-percentage">Percentage</span>
+          <span className="header-revision">Last revision</span>
+        </div>
 
-          {/* En-têtes */}
-          <div className="table-header">
-            <div className="header-cell folder-cell">Folder's Name</div>
-            <div className="header-cell percentage-cell">Percentage</div>
-            <div className="header-cell revision-cell">Last Revision</div>
+        {sortedSessions.length === 0 ? (
+          <div className="empty-state">
+            No study sessions yet. Complete a study session to see your history!
           </div>
-
-          {/* Lignes du tableau */}
-          <div className="history-table">
-            {historyData.map((item, index) => (
-              <div className="table-row" key={index}>
-                <div className="data-cell folder-cell">{item.folder}</div>
-                <div className="data-cell percentage-cell">{item.percentage}</div>
-                <div className="data-cell revision-cell">{item.lastRevision}</div>
+        ) : (
+          sortedSessions.map((session, index) => (
+            <div key={index} className={`history-item ${index === sortedSessions.length - 1 ? 'no-border' : ''}`}>
+              <div className="history-folder">
+                <div 
+                  className="history-dot" 
+                  style={{ 
+                    background: session.percentage >= 80 ? '#22c55e' : session.percentage >= 60 ? '#eab308' : '#ef4444' 
+                  }}>
+                </div>
+                <span className="history-subject">{session.folderName}</span>
               </div>
-            ))}
-          </div>
+              
+              <span className="history-percentage">{session.percentage}%</span>
+              
+              <span className="history-time">{getTimeAgo(session.timestamp)}</span>  {/* 🆕 MODIFIER */}
+            </div>
+          ))
+        )}
 
-          {/* Bouton Filter History */}
-          <div className="filter-button-container">
-            <button className="filter-history-btn" onClick={openFilterPopup}>
-              Filter History
-            </button>
-          </div>
+        <div className="history-footer">
+          <button onClick={() => onOpenModal('filterHistory')} className="btn btn-primary">
+            Filter History
+          </button>
         </div>
       </div>
-
-      {/* Pop-up de filtrage */}
-      <FilterPopup
-        isOpen={showFilterPopup}
-        onClose={closeFilterPopup}
-        onApply={handleApplyFilter}
-      />
     </div>
   );
-}
+};
 
 export default StudyHistory;

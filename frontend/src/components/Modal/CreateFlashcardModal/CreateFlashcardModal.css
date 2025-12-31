@@ -1,0 +1,11 @@
+.modal-content-wide {
+  max-width: 450px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group:last-child {
+  margin-bottom: 0;
+}

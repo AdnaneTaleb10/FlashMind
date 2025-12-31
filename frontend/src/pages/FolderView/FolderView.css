@@ -1,0 +1,153 @@
+.folder-view-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+.folder-view-card {
+  background: white;
+  border: 2px solid #1f2937;
+  border-radius: 12px;
+  padding: 30px;
+}
+
+.folder-view-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 30px;
+  justify-content: center;
+}
+
+.folder-view-title {
+  color: #1f2937;
+  font-size: 20px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.folders-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.folder-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px 0;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.folder-row.no-border {
+  border-bottom: none;
+}
+
+.folder-info-clickable {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  cursor: pointer;
+  padding: 5px 8px;
+  margin: -5px -8px;
+  border-radius: 6px;
+  transition: background 0.2s;
+}
+
+.folder-info-clickable:hover {
+  background: #f3f4f6;
+}
+
+.folder-name {
+  font-size: 15px;
+  color: #1f2937;
+  font-weight: 500;
+}
+
+.folder-actions {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.folder-date {
+  font-size: 14px;
+  color: #6b7280;
+  min-width: 100px;
+}
+
+.btn {
+  border: none;
+  border-radius: 6px;
+  padding: 8px 20px;
+  font-size: 14px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.btn:hover:not(.btn-disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.btn:active:not(.btn-disabled) {
+  transform: translateY(0);
+}
+
+.btn-primary {
+  background: #3b82f6;
+  color: white;
+}
+
+.btn-primary:hover:not(.btn-disabled) {
+  background: #2563eb;
+}
+
+.btn-danger {
+  background: #ef4444;
+  color: white;
+}
+
+.btn-danger:hover {
+  background: #dc2626;
+}
+
+.btn-secondary {
+  background: white;
+  color: #3b82f6;
+  border: 2px solid #3b82f6;
+}
+
+.btn-secondary:hover {
+  background: #eff6ff;
+}
+
+.btn-disabled {
+  opacity: 0.5;
+  cursor: not-allowed !important;
+}
+
+.btn-disabled:hover {
+  transform: none !important;
+  box-shadow: none !important;
+  background: #3b82f6 !important;
+}
+
+.folder-view-footer {
+  display: flex;
+  justify-content: flex-start;
+  margin-top: 25px;
+}
+
+.folder-view-footer .btn {
+  padding: 10px 24px;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 40px 20px;
+  color: #6b7280;
+  font-size: 15px;
+}
