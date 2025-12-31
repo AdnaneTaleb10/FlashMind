@@ -18,7 +18,7 @@ function SignUp() {  // Remove onSwitchToLogin prop
     
     // Redirect to dashboard after successful registration
     setTimeout(() => {
-      navigate('/dashboard');
+      navigate('/app');
     }, 1500); // Small delay to let user see the success toast
   };
 

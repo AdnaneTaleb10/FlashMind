@@ -6,10 +6,6 @@ if(!API_BASE_URL){
     throw new Error('VITE_API_URL is not defined in .env file');
 }
 
-if (import.meta.env.DEV) {
-  console.log('API Base URL:', API_BASE_URL);
-}
-
 export const registerUser = async (userData) => {
     try {
         const response = await axios.post(`${API_BASE_URL}/auth/register`, userData);

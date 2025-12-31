@@ -22,7 +22,7 @@ function SignIn() {
 
     // Redirect to dashboard after successful login
     setTimeout(() => {
-      navigate('/dashboard');
+      navigate('/app');
     }, 1500);
   };
 

@@ -9,7 +9,7 @@ body, html, #root, .login-container-login, .login-container-login * {
 .login-container-login {
   display: flex;
   width: 100%;
-  min-height: 100vh;
+  height: 100vh;
   background: white;
   overflow-x: hidden;
 }
