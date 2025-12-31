@@ -13,8 +13,15 @@ const StudyQuestion = ({ onNavigate, folder, card, cardNumber, totalCards }) => 
           Studying {folder?.name || 'Folder'} ({cardNumber}/{totalCards})
         </h3>
 
-        <div className="study-content">
-          {card?.question || 'Question'}
+        <div className="flip-card">
+          <div className="flip-card-inner">
+            <div className="flip-card-front">
+              <div className="card-label">Question</div>
+              <div className="card-content">
+                {card?.question || 'Question'}
+              </div>
+            </div>
+          </div>
         </div>
 
         <div className="study-footer">

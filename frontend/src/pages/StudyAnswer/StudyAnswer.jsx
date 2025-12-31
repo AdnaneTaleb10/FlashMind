@@ -4,6 +4,12 @@ import './StudyAnswer.css';
 
 const StudyAnswer = ({ onNavigate, folder, card, onAnswer, onNext, cardNumber, totalCards }) => {
   const [selectedAnswer, setSelectedAnswer] = useState(null);
+  const [isFlipped, setIsFlipped] = useState(false);
+
+  // Animation de flip au chargement
+  useState(() => {
+    setTimeout(() => setIsFlipped(true), 100);
+  }, []);
 
   const handleCorrect = () => {
     if (selectedAnswer === null) {
@@ -21,7 +27,10 @@ const StudyAnswer = ({ onNavigate, folder, card, onAnswer, onNext, cardNumber, t
 
   const handleNext = () => {
     if (selectedAnswer !== null) {
-      onNext();
+      setIsFlipped(false);
+      setTimeout(() => {
+        onNext();
+      }, 300);
     }
   };
 
@@ -36,8 +45,21 @@ const StudyAnswer = ({ onNavigate, folder, card, onAnswer, onNext, cardNumber, t
           Studying {folder?.name || 'Folder'} ({cardNumber}/{totalCards})
         </h3>
 
-        <div className="answer-content">
-          {card?.answer || 'Answer'}
+        <div className="flip-card">
+          <div className={`flip-card-inner ${isFlipped ? 'flipped' : ''}`}>
+            <div className="flip-card-front">
+              <div className="card-label">Question</div>
+              <div className="card-content">
+                {card?.question || 'Question'}
+              </div>
+            </div>
+            <div className="flip-card-back">
+              <div className="card-label">Answer</div>
+              <div className="card-content">
+                {card?.answer || 'Answer'}
+              </div>
+            </div>
+          </div>
         </div>
 
         <div className="answer-actions">
