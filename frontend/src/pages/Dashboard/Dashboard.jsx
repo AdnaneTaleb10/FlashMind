@@ -1,5 +1,7 @@
 import { CreditCard, Folder } from 'lucide-react';
 import './Dashboard.css';
+import { getTimeAgo } from '../../utils/helpers';  // 🆕 AJOUTER
+
 
 const Dashboard = ({ folders, sessions, onNavigate, onOpenModal, onStartStudy, onEditFolder, onDeleteFolder }) => {
   const totalCards = folders.reduce((sum, folder) => sum + folder.cards.length, 0);
@@ -116,7 +118,7 @@ const Dashboard = ({ folders, sessions, onNavigate, onOpenModal, onStartStudy, o
               
               <span className="session-percentage">{session.percentage}%</span>
               
-              <span className="session-time">{session.timeAgo}</span>
+              <span className="session-time">{getTimeAgo(session.timestamp)}</span>  {/* 🆕 MODIFIER */}
             </div>
           ))
         )}

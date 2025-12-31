@@ -1,6 +1,8 @@
 import { useMemo } from 'react';
 import { X } from 'lucide-react';
 import './StudyHistory.css';
+import { getTimeAgo } from '../../utils/helpers';  // 🆕 AJOUTER
+
 
 const StudyHistory = ({ sessions, onNavigate, onOpenModal, filterType}) => {
   const sortedSessions = useMemo(() => {
@@ -49,7 +51,7 @@ const StudyHistory = ({ sessions, onNavigate, onOpenModal, filterType}) => {
               
               <span className="history-percentage">{session.percentage}%</span>
               
-              <span className="history-time">{session.timeAgo}</span>
+              <span className="history-time">{getTimeAgo(session.timestamp)}</span>  {/* 🆕 MODIFIER */}
             </div>
           ))
         )}

@@ -225,7 +225,7 @@ const App = () => {
       correctAnswers,
       wrongAnswers: totalCards - correctAnswers,
       timestamp: new Date().toISOString(),
-      timeAgo: 'just now'
+      
     };
 
     setSessions([...sessions, newSession]);
