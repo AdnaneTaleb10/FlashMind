@@ -8,7 +8,9 @@ if(!API_BASE_URL){
 
 export const registerUser = async (userData) => {
     try {
-        const response = await axios.post(`${API_BASE_URL}/auth/register`, userData);
+        const response = await axios.post(`${API_BASE_URL}/auth/register`, userData, {
+            withCredentials: true
+        });
         return response.data;
     }catch (error) {
         if(error.response && error.response.data.error){
@@ -21,7 +23,10 @@ export const registerUser = async (userData) => {
 
 export const loginUser = async (email, password) => {
     try {
-        const response = await axios.post(`${API_BASE_URL}/auth/login`, { email, password });
+        const response = await axios.post(`${API_BASE_URL}/auth/login`,
+            { email, password },
+            {withCredentials: true}
+    );
         return response.data;
     }catch (error) {
         if(error.response && error.response.data.error){
@@ -32,13 +37,15 @@ export const loginUser = async (email, password) => {
     }
 }
 
-export const getUserProfile = async (userId) => {
+export const logoutUser = async () => {
     try {
-        const response = await axios.get(`${API_BASE_URL}/users/${userId}`);
+        const response = await axios.post(`${API_BASE_URL}/auth/logout`, {}, {
+            withCredentials: true
+        });
         return response.data;
-    }catch(error){
+    } catch (error) {
         if(error.response && error.response.data.error){
-            throw new Error(error.response.data.error)
+            throw new Error(error.response.data.error);
         }else{
             throw new Error('Network error. Please try again.');
         }

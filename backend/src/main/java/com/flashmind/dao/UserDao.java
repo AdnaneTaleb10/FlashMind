@@ -91,6 +91,11 @@ public class UserDao {
         return jdbcTemplate.update(sql, user.getEmail(), user.getName(), user.getUsername(), user.getId());
     }
 
+    public int updatePassword(Integer userId, String newPassword) {
+        String sql = "UPDATE users SET password = ? WHERE id = ?";
+        return jdbcTemplate.update(sql, newPassword, userId);
+    }
+
     // Delete user by ID
     public int deleteUser(Integer id) {
         String sql = "DELETE FROM users WHERE id = ?";

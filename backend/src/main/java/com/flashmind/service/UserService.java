@@ -104,6 +104,25 @@ public class UserService {
         return existingUser;
     }
 
+    // Change password
+    public void changePassword(Integer userId, String currentPassword, String newPassword) {
+        // Get user
+        User user = getUserById(userId);
+
+        // Verify current password
+        if (!user.getPassword().equals(currentPassword)) {
+            throw new IllegalArgumentException("Current password is incorrect");
+        }
+
+        // Validate new password
+        if (newPassword == null || newPassword.length() < 6) {
+            throw new IllegalArgumentException("New password must be at least 6 characters");
+        }
+
+        // Update password in database
+        userDao.updatePassword(userId, newPassword);
+    }
+
     // Delete user
     public void deleteUser(Integer userId) {
         // Check if user exists

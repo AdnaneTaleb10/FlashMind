@@ -1,313 +1,311 @@
-/* Reset et dimension complète de la page */
-html, body, #root {
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  height: 100%;
-  box-sizing: border-box;
-}
+/* ---------- Container ---------- */
 
-/* Container principal */
 .user-info-container {
-  margin: 0;
-  padding: 0;
   width: 100%;
-  min-height: 100vh; 
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
+  padding: clamp(2rem, 5vw, 3rem) clamp(1rem, 4vw, 2rem);
 }
 
-/* Rectangle bleu en haut */
-.blue-header {
-  position: fixed; 
-  top: 0;
-  left: 0;
-  width: 100%;   
-  height: 80px;  
-  background: #59AEF8;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 40px; 
-  z-index: 1000;   
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  box-sizing: border-box;
-}
+/* ---------- Content Wrapper ---------- */
 
-/* Titre FLASH MIND */
-.flash-mind-title {
-  color: white;
-  font-size: 32px;
-  font-weight: bold;
-  letter-spacing: 1.5px;
-  margin: 0;
-  font-family: 'Montserrat', sans-serif;
-}
-
-/* Icône blanche à droite */
-.white-icon {
-  display: flex;
-  align-items: center;
-}
-
-/* Conteneur principal */
 .content-wrapper {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   flex: 1;
-  padding: 120px 20px 40px 20px;
 }
 
-/* Titre avec icône simple dans la card */
+/* ---------- User Info Card ---------- */
+
+.user-info-card {
+  width: 100%;
+  max-width: 50rem;
+  background: #ffffff;
+  border-radius: 1rem;
+  padding: clamp(2rem, 4vw, 2.5rem);
+  box-shadow: 0 0.25rem 1.25rem rgba(0, 0, 0, 0.08);
+  border: 0.125rem solid #e5e7eb;
+}
+
+/* ---------- Title Section ---------- */
+
 .title-with-icon {
   display: flex;
   align-items: center;
-  margin-bottom: 40px;
-  gap: 230px;
+  gap: clamp(0.75rem, 3vw, 1rem);
+  margin-bottom: clamp(2rem, 4vw, 2.5rem);
+  padding-bottom: clamp(1rem, 3vw, 1.5rem);
+  border-bottom: 0.125rem solid #f3f4f6;
 }
 
 .simple-icon {
-  font-size: 28px;
-  color: black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: clamp(2rem, 5vw, 2.5rem);
+  height: clamp(2rem, 5vw, 2.5rem);
+}
+
+.simple-icon svg {
+  width: 100%;
+  height: 100%;
 }
 
 .card-title {
-  color: black;
-  font-size: 24px;
+  color: #111827;
+  font-size: clamp(1.4rem, 3vw, 1.75rem);
   font-weight: 600;
   margin: 0;
-  opacity: 0.9;
 }
 
-/* Carte utilisateur */
-.user-info-card {
-  width: 800px;
-  background: white;
-  border-radius: 30px;
-  padding: 40px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-  border: 2px solid #000000;
-  margin-top: 20px;
-}
+/* ---------- Info Section ---------- */
 
 .info-section {
   display: flex;
   flex-direction: column;
-  gap: 25px; /* espace vertical uniforme entre tous les champs */
+  gap: clamp(1.5rem, 3vw, 2rem);
 }
 
 .info-row {
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(7rem, auto) 1fr;
   align-items: center;
-  justify-content: space-between;
-  padding-bottom: 0;
+  gap: clamp(1rem, 3vw, 1.5rem);
 }
 
 .info-label {
-  color: black;
-  font-size: 18px;
+  color: #374151;
+  font-size: clamp(0.95rem, 2.5vw, 1.05rem);
   font-weight: 600;
-  width: 150px;
 }
 
 .info-content {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  flex: 1;
-  gap: 20px;
+  gap: clamp(0.75rem, 2vw, 1rem);
 }
 
 .info-value {
-  color: black;
-  font-size: 16px;
-  background: white;
-  padding: 10px 15px;
-  border-radius: 10px;
+  color: #1f2937;
+  font-size: clamp(0.9rem, 2.5vw, 1rem);
+  background: #f9fafb;
+  padding: clamp(0.625rem, 2vw, 0.75rem) clamp(0.875rem, 3vw, 1rem);
+  border-radius: 0.5rem;
   flex: 1;
-  border: 1px solid #aaa;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  border: 0.0625rem solid #d1d5db;
 }
 
-/* Champ email séparé visuellement mais même gap */
-.email-field, .email-input {
-  flex: 1;
-  padding: 10px 15px;
-  border-radius: 10px;
-  border: 1px solid #aaa;
-  background: white;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-  font-size: 16px;
-  color: black;
-  max-width: 508px;
+.email-row .info-content {
+  justify-content: flex-start;
 }
 
-/* Boutons */
+.email-field {
+  color: #6b7280;
+  background: #f3f4f6;
+  border-color: #e5e7eb;
+  max-width: fit-content;
+  min-width: 30rem;
+}
+
+/* ---------- Buttons ---------- */
+
 .change-btn {
-  background: #59AEF8;
+  background: #3b82f6;
   color: white;
   border: none;
-  border-radius: 10px;
-  padding: 10px 20px;
-  font-size: 14px;
-  font-weight: 600;
+  border-radius: 0.5rem;
+  padding: clamp(0.5rem, 2vw, 0.625rem) clamp(0.875rem, 3vw, 1.125rem);
+  font-size: clamp(0.85rem, 2.5vw, 0.9rem);
+  font-weight: 500;
   cursor: pointer;
-  transition: all 0.3s;
+  transition: all 0.2s ease;
   white-space: nowrap;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
 }
 
 .change-btn:hover {
-  background: #4A9DE6;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  background: #2563eb;
+  transform: translateY(-0.0625rem);
+  box-shadow: 0 0.25rem 0.75rem rgba(59, 130, 246, 0.3);
 }
 
-/* Mode édition */
+.change-btn:active {
+  transform: translateY(0);
+}
+
+/* ---------- Edit Mode ---------- */
+
 .edit-mode {
   display: flex;
-  align-items: center;
-  gap: 15px;
+  flex-direction: column;
+  gap: clamp(0.75rem, 2vw, 1rem);
   flex: 1;
 }
 
 .edit-input {
-  flex: 1;
-  padding: 10px 15px;
-  border: 1px solid #aaa;
-  border-radius: 10px;
-  font-size: 16px;
+  width: 100%;
+  padding: clamp(0.625rem, 2vw, 0.75rem) clamp(0.875rem, 3vw, 1rem);
+  border: 0.125rem solid #d1d5db;
+  border-radius: 0.5rem;
+  font-size: clamp(0.9rem, 2.5vw, 1rem);
   background: white;
-  color: black;
-  box-shadow: 0 2px 6px rgba(89, 174, 248, 0.25);
+  color: #1f2937;
+  transition: all 0.2s ease;
 }
 
 .edit-input:focus {
   outline: none;
-  border-color: #59AEF8;
-  box-shadow: 0 4px 12px rgba(89, 174, 248, 0.35);
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 0.1875rem rgba(59, 130, 246, 0.1);
+}
+
+.edit-input::placeholder {
+  color: #9ca3af;
 }
 
 .edit-buttons {
   display: flex;
-  gap: 10px;
+  justify-content: center;
+  gap: clamp(0.5rem, 2vw, 0.75rem);
+  margin-top: clamp(0.25rem, 1vw, 0.5rem);
 }
 
 .save-btn {
-  background: #4CAF50;
+  background: #22c55e;
   color: white;
   border: none;
-  border-radius: 8px;
-  padding: 8px 16px;
-  font-size: 14px;
-  font-weight: 600;
+  border-radius: 0.5rem;
+  padding: clamp(0.5rem, 2vw, 0.625rem) clamp(1.25rem, 3vw, 1.5rem);
+  font-size: clamp(0.85rem, 2.5vw, 0.9rem);
+  font-weight: 500;
   cursor: pointer;
-  transition: all 0.3s;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  transition: all 0.2s ease;
+  min-width: 5rem;
 }
 
 .save-btn:hover {
-  background: #45a049;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  background: #16a34a;
+  transform: translateY(-0.0625rem);
+  box-shadow: 0 0.25rem 0.75rem rgba(34, 197, 94, 0.3);
+}
+
+.save-btn:active {
+  transform: translateY(0);
 }
 
 .cancel-btn {
-  background: #f44336;
+  background: #ef4444;
   color: white;
   border: none;
-  border-radius: 8px;
-  padding: 8px 16px;
-  font-size: 14px;
-  font-weight: 600;
+  border-radius: 0.5rem;
+  padding: clamp(0.5rem, 2vw, 0.625rem) clamp(1.25rem, 3vw, 1.5rem);
+  font-size: clamp(0.85rem, 2.5vw, 0.9rem);
+  font-weight: 500;
   cursor: pointer;
-  transition: all 0.3s;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  transition: all 0.2s ease;
+  min-width: 5rem;
 }
 
 .cancel-btn:hover {
-  background: #da190b;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  background: #dc2626;
+  transform: translateY(-0.0625rem);
+  box-shadow: 0 0.25rem 0.75rem rgba(239, 68, 68, 0.3);
 }
 
-/* Responsive */
-@media (max-width: 850px) {
-  .user-info-card {
-    width: 95%;
-    max-width: 700px;
-    padding: 30px;
-  }
-  
-  .title-with-icon {
-    gap: 150px;
-  }
+.cancel-btn:active {
+  transform: translateY(0);
 }
 
-@media (max-width: 700px) {
-  .user-info-card {
-    padding: 25px;
-  }
-  
-  .title-with-icon {
-    gap: 100px;
-  }
-  
+/* ---------- Back Button Container ---------- */
+
+.back-button-container {
+  display: flex;
+  justify-content: center;
+  margin-top: clamp(2rem, 4vw, 2.5rem);
+  padding-top: clamp(1.5rem, 3vw, 2rem);
+  border-top: 0.125rem solid #f3f4f6;
+}
+
+.btn {
+  border: none;
+  border-radius: 0.5rem;
+  padding: clamp(0.625rem, 2vw, 0.75rem) clamp(1.5rem, 4vw, 2rem);
+  font-size: clamp(0.9rem, 2.5vw, 1rem);
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.btn-primary {
+  background: #3b82f6;
+  color: white;
+}
+
+.btn-primary:hover {
+  background: #2563eb;
+  transform: translateY(-0.0625rem);
+  box-shadow: 0 0.25rem 0.75rem rgba(59, 130, 246, 0.3);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+/* ---------- Mobile Optimization ---------- */
+
+@media (max-width: 48rem) {
   .info-row {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 15px;
+    grid-template-columns: 1fr;
+    gap: clamp(0.5rem, 2vw, 0.75rem);
   }
-  
-  .info-label {
-    width: 100%;
-  }
-  
-  .info-content {
-    width: 100%;
-  }
-}
 
-@media (max-width: 480px) {
-  .blue-header {
-    padding: 15px 20px;
-  }
-  
-  .flash-mind-title {
-    font-size: 28px;
-  }
-  
-  .content-wrapper {
-    padding: 20px 15px;
-  }
-  
-  .user-info-card {
-    padding: 20px;
-  }
-  
-  .title-with-icon {
-    flex-direction: column;
-    gap: 15px;
-    text-align: center;
-  }
-  
-  .simple-icon {
-    font-size: 24px;
-  }
-  
-  .card-title {
-    font-size: 20px;
-  }
-  
   .info-label {
-    font-size: 16px;
+    font-weight: 600;
   }
-  
-  .edit-mode {
+
+  .info-content {
     flex-direction: column;
     align-items: stretch;
   }
-  
+
+  .email-row .info-content {
+    align-items: flex-start;
+  }
+
+  .email-field {
+    max-width: 100%;
+    width: 100%;
+  }
+
+  .change-btn {
+    width: 100%;
+  }
+
   .edit-buttons {
+    flex-direction: row;
     justify-content: center;
+  }
+
+  .save-btn,
+  .cancel-btn {
+    flex: 0 0 auto;
+    min-width: 6rem;
+  }
+}
+
+@media (max-width: 30rem) {
+  .user-info-card {
+    padding: clamp(1.5rem, 4vw, 2rem);
+  }
+
+  .title-with-icon {
+    flex-direction: row;
+    justify-content: flex-start;
+  }
+
+  .info-section {
+    gap: clamp(1.25rem, 3vw, 1.5rem);
   }
 }

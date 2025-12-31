@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import './SignUpForm.css';
 import { registerUser } from '../../services/authService';
 import { toast } from 'sonner'; // Import toast
+import {Eye , EyeOff} from "lucide-react";
 
 function SignUpForm({ onSignup }) {
   const [formData, setFormData] = useState({
@@ -156,7 +157,7 @@ function SignUpForm({ onSignup }) {
           aria-label="Toggle password visibility"
           disabled={isLoading}
         >
-          👁
+          {showPassword ? <EyeOff /> : <Eye />}
         </button>
       </div>
 
@@ -177,7 +178,7 @@ function SignUpForm({ onSignup }) {
           aria-label="Toggle confirm password visibility"
           disabled={isLoading}
         >
-          👁
+          {showConfirm ? <EyeOff /> : <Eye />}
         </button>
       </div>
 

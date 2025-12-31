@@ -19,41 +19,54 @@ export const Storage = {
   }
 };
 
-// 🆕 Fonction pour calculer le temps écoulé
 export const getTimeAgo = (timestamp) => {
+  if (!timestamp) return 'Unknown';
+
   const now = new Date();
   const past = new Date(timestamp);
-  const diffInSeconds = Math.floor((now - past) / 1000);
+
+  if (isNaN(past.getTime())) {
+    return 'Invalid date';
+  }
+
+  const diffInMilliseconds = now - past;
+  const diffInSeconds = Math.floor(diffInMilliseconds / 1000);
 
   if (diffInSeconds < 60) {
-    return 'just now';
+    return `${diffInSeconds} second${diffInSeconds !== 1 ? 's' : ''} ago`;
   }
 
   const diffInMinutes = Math.floor(diffInSeconds / 60);
-  if (diffInMinutes < 60) {
-    return `${diffInMinutes} min${diffInMinutes > 1 ? 's' : ''} ago`;
+
+  if (diffInMinutes < 90) {
+    return `${diffInMinutes} minute${diffInMinutes !== 1 ? 's' : ''} ago`;
   }
 
   const diffInHours = Math.floor(diffInMinutes / 60);
+  const remainingMinutes = diffInMinutes % 60;
+
   if (diffInHours < 24) {
-    return `${diffInHours} hour${diffInHours > 1 ? 's' : ''} ago`;
+    if (remainingMinutes > 0) {
+      return `${diffInHours} hour${diffInHours !== 1 ? 's' : ''} and ${remainingMinutes} minute${remainingMinutes !== 1 ? 's' : ''} ago`;
+    }
+    return `${diffInHours} hour${diffInHours !== 1 ? 's' : ''} ago`;
   }
 
   const diffInDays = Math.floor(diffInHours / 24);
   if (diffInDays < 7) {
-    return `${diffInDays} day${diffInDays > 1 ? 's' : ''} ago`;
+    return `${diffInDays} day${diffInDays !== 1 ? 's' : ''} ago`;
   }
 
   const diffInWeeks = Math.floor(diffInDays / 7);
   if (diffInWeeks < 4) {
-    return `${diffInWeeks} week${diffInWeeks > 1 ? 's' : ''} ago`;
+    return `${diffInWeeks} week${diffInWeeks !== 1 ? 's' : ''} ago`;
   }
 
   const diffInMonths = Math.floor(diffInDays / 30);
   if (diffInMonths < 12) {
-    return `${diffInMonths} month${diffInMonths > 1 ? 's' : ''} ago`;
+    return `${diffInMonths} month${diffInMonths !== 1 ? 's' : ''} ago`;
   }
 
   const diffInYears = Math.floor(diffInDays / 365);
-  return `${diffInYears} year${diffInYears > 1 ? 's' : ''} ago`;
+  return `${diffInYears} year${diffInYears !== 1 ? 's' : ''} ago`;
 };

@@ -11,7 +11,9 @@ import org.springframework.stereotype.Repository;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Repository
@@ -20,7 +22,6 @@ public class StudySessionDao {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    // RowMapper to convert ResultSet to StudySession object
     private final RowMapper<StudySession> studySessionRowMapper = new RowMapper<StudySession>() {
         @Override
         public StudySession mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -28,14 +29,29 @@ public class StudySessionDao {
             session.setId(rs.getInt("id"));
             session.setUserId(rs.getInt("user_id"));
             session.setFolderId(rs.getInt("folder_id"));
+            session.setScore(rs.getInt("score"));  // ← ADD THIS
             session.setDate(rs.getTimestamp("date").toLocalDateTime());
             return session;
         }
     };
 
-    // Create a new study session - Returns the session with generated ID
+    private final RowMapper<Map<String, Object>> studySessionWithFolderRowMapper = new RowMapper<Map<String, Object>>() {
+        @Override
+        public Map<String, Object> mapRow(ResultSet rs, int rowNum) throws SQLException {
+            Map<String, Object> session = new HashMap<>();
+            session.put("id", rs.getInt("id"));
+            session.put("userId", rs.getInt("user_id"));
+            session.put("folderId", rs.getInt("folder_id"));
+            session.put("folderName", rs.getString("folder_name"));  // ← FROM JOIN
+            session.put("score", rs.getInt("score"));
+            session.put("date", rs.getTimestamp("date").toLocalDateTime().toString());
+            return session;
+        }
+    };
+
+    // Create a new study session
     public StudySession createStudySession(StudySession studySession) {
-        String sql = "INSERT INTO study_sessions (user_id, folder_id, date) VALUES (?, ?, now())";
+        String sql = "INSERT INTO study_sessions (user_id, folder_id, score, date) VALUES (?, ?, 0, now())";  // ← ADD score with default 0
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
@@ -63,7 +79,25 @@ public class StudySessionDao {
         }
     }
 
-    // Find all study sessions by user ID
+    // Update study session score - NEW METHOD
+    public int updateScore(Integer id, Integer score) {
+        String sql = "UPDATE study_sessions SET score = ? WHERE id = ?";
+        return jdbcTemplate.update(sql, score, id);
+    }
+
+    // Find all study sessions by user ID with folder names - UPDATED
+    public List<Map<String, Object>> findByUserIdWithFolderName(Integer userId) {
+        String sql = """
+            SELECT ss.id, ss.user_id, ss.folder_id, ss.score, ss.date, f.folder_name
+            FROM study_sessions ss
+            JOIN folders f ON ss.folder_id = f.id
+            WHERE ss.user_id = ?
+            ORDER BY ss.date DESC
+        """;
+        return jdbcTemplate.query(sql, studySessionWithFolderRowMapper, userId);
+    }
+
+    // OLD METHOD - Keep for backward compatibility
     public List<StudySession> findByUserId(Integer userId) {
         String sql = "SELECT * FROM study_sessions WHERE user_id = ? ORDER BY date DESC";
         return jdbcTemplate.query(sql, studySessionRowMapper, userId);

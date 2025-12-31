@@ -282,6 +282,7 @@ public class UserController {
             @ApiResponse(responseCode = "400", description = "Invalid input or password too short"),
             @ApiResponse(responseCode = "401", description = "User not authenticated or current password incorrect")
     })
+
     @PutMapping("/users/password")
     public ResponseEntity<?> changePassword(
             @io.swagger.v3.oas.annotations.parameters.RequestBody(
@@ -311,22 +312,8 @@ public class UserController {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
             }
 
-            User user = userService.getUserById(userId);
-
-            if (!user.getPassword().equals(currentPassword)) {
-                Map<String, String> error = new HashMap<>();
-                error.put("error", "Current password is incorrect");
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
-            }
-
-            if (newPassword.length() < 6) {
-                Map<String, String> error = new HashMap<>();
-                error.put("error", "New password must be at least 6 characters");
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
-            }
-
-            user.setPassword(newPassword);
-            userService.updateUserProfile(userId, user);
+            // Use the new service method
+            userService.changePassword(userId, currentPassword, newPassword);
 
             Map<String, String> response = new HashMap<>();
             response.put("message", "Password updated");

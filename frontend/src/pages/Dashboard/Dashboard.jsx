@@ -3,78 +3,26 @@ import { useNavigate } from 'react-router-dom';
 import { useApp } from '../../context/AppContext';
 import './Dashboard.css';
 import { getTimeAgo } from '../../utils/helpers';
-import {useState , useEffect} from "react";
-import {getDashboardData} from "../../services/dashboardService.js";
 
 const Dashboard = () => {
   const navigate = useNavigate();
   const {
-    /*
     folders,
     sessions,
-    */
     setCurrentModal,
     startStudySession,
     setEditingFolder,
     setConfirmAction,
     deleteFolder,
   } = useApp();
-/*
+
+  // Calculate stats from Context data
   const totalCards = folders.reduce((sum, folder) => sum + (folder.cards?.length || 0), 0);
   const totalFolders = folders.length;
-*/
-
-  const [folders, setFolders] = useState([]);
-  const [sessions, setSessions] = useState([]);
-  const [stats, setStats] = useState({
-    totalCards: 0,
-    totalFolders: 0,
-    totalSessions: 0
-  });
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    fetchDashboardData();
-  }, []);
-
-  const fetchDashboardData = async () => {
-    try {
-      setIsLoading(true);
-
-      // Get userId from localStorage (assuming you store it after login)
-      const userId = localStorage.getItem('userId');
-
-      if (!userId) {
-        toast.error('User not found', {
-          description: 'Please log in again.'
-        });
-        return;
-      }
-
-      const data = await getDashboardData(userId);
-
-      // Update state with backend data
-      setFolders(data.recentFolders || []);
-      setSessions(data.recentSessions || []);
-      setStats({
-        totalCards: data.stats?.totalCards || 0,
-        totalFolders: data.stats?.totalFolders || 0,
-        totalSessions: data.stats?.totalSessions || 0
-      });
-
-    } catch (error) {
-      console.error('Dashboard fetch error:', error);
-      toast.error('Failed to load dashboard', {
-        description: error.message
-      });
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  const totalSessions = sessions.length;
 
   const recentSessions = sessions.slice(-3).reverse();
   const displayedFolders = folders.slice(0, 3);
-
 
   const handleEditFolder = (folder) => {
     setEditingFolder(folder);
@@ -92,9 +40,11 @@ const Dashboard = () => {
     setCurrentModal('confirm');
   };
 
-  const handleStartStudy = (folder) => {
-    startStudySession(folder);
-    navigate('/app/study/question');
+  const handleStartStudy = async (folder) => {
+    const success = await startStudySession(folder);
+    if (success) {
+      navigate('/app/study/question');
+    }
   };
 
   return (
@@ -105,7 +55,7 @@ const Dashboard = () => {
           <div className="stat-card">
             <div className="stat-header">
               <CreditCard size={20} color="#3b82f6" />
-              <span className="stat-number">{stats.totalCards}</span>
+              <span className="stat-number">{totalCards}</span>
             </div>
             <div className="stat-label">Flashcards</div>
           </div>
@@ -113,7 +63,7 @@ const Dashboard = () => {
           <div className="stat-card">
             <div className="stat-header">
               <Folder size={20} color="#3b82f6" />
-              <span className="stat-number">{stats.totalFolders}</span>
+              <span className="stat-number">{totalFolders}</span>
             </div>
             <div className="stat-label">Folders</div>
           </div>

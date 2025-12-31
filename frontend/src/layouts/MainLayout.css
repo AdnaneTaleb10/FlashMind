@@ -22,6 +22,11 @@
     margin: 0;
 }
 
+.icons{
+    display: flex;
+    gap: 30px;
+}
+
 .user-icon {
     background: rgba(255, 255, 255, 0.2);
     padding: 0.5rem;
@@ -40,7 +45,6 @@
 .app-main {
     flex: 1;
     padding: 2rem;
-    max-width: 1200px;
     width: 100%;
     margin: 0 auto;
 }

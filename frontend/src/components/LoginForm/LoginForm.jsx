@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import './LoginForm.css';
 import { loginUser } from '../../services/authService';
 import { toast } from 'sonner';
+import {Eye , EyeOff} from "lucide-react";
 
 function LoginForm({ onLogin }) {
   const [email, setEmail] = useState('');
@@ -102,7 +103,7 @@ function LoginForm({ onLogin }) {
               aria-label="Toggle password visibility"
               disabled={isLoading}
           >
-            {showPassword ? '👁️' : '👁️‍🗨️'}
+            {showPassword ? <EyeOff /> : <Eye />}
           </button>
         </div>
 

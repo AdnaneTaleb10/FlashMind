@@ -1,44 +1,32 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getUserProfile } from '../../services/authService';
-import { toast } from 'sonner';
+import { useApp } from '../../context/AppContext';
 import './UserInfo.css';
 
 function UserInfo() {
   const navigate = useNavigate();
-  const [userInfo, setUserInfo] = useState({
-    username: '',
-    name: '',
-    email: '',
-    password: '********'
-  });
+  const {
+    userInfo,
+    fetchUserProfile,
+    updateProfile,
+    updatePassword
+  } = useApp();
+
   const [isLoading, setIsLoading] = useState(true);
   const [editingField, setEditingField] = useState(null);
   const [editValue, setEditValue] = useState('');
+  const [currentPassword, setCurrentPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
 
   useEffect(() => {
-    fetchUserInfo();
+    loadUserProfile();
   }, []);
 
-  const fetchUserInfo = async () => {
+  const loadUserProfile = async () => {
     try {
-      const userId = localStorage.getItem('userId');
-      if (!userId) {
-        toast.error('User not found. Please log in again.');
-        navigate('/signin');
-        return;
-      }
-
-      const userData = await getUserProfile(userId);
-      setUserInfo({
-        username: userData.username || '',
-        name: userData.name || '',
-        email: userData.email || '',
-        password: '********'
-      });
+      await fetchUserProfile();
     } catch (error) {
       console.error('Failed to fetch user info:', error);
-      toast.error('Failed to load user information');
     } finally {
       setIsLoading(false);
     }
@@ -46,17 +34,50 @@ function UserInfo() {
 
   const handleEditClick = (field) => {
     setEditingField(field);
-    setEditValue(userInfo[field]);
+    if (field === 'password') {
+      setCurrentPassword('');
+      setNewPassword('');
+    } else {
+      setEditValue(userInfo[field]);
+    }
   };
 
-  const handleSave = (field) => {
-    setUserInfo({ ...userInfo, [field]: editValue });
+  const handleSave = async (field) => {
+    console.log('handleSave called with field:', field);
+    console.log('Current password:', currentPassword);
+    console.log('New password:', newPassword);
+
+    try {
+      if (field === 'password') {
+        console.log('Calling updatePassword...');
+        await updatePassword(currentPassword, newPassword);
+        console.log('Password updated successfully');
+
+        // Clear fields and close edit mode on success
+        setEditingField(null);
+        setCurrentPassword('');
+        setNewPassword('');
+      } else if (field === 'username' || field === 'name') {
+        const newName = field === 'name' ? editValue : userInfo.name;
+        const newUsername = field === 'username' ? editValue : userInfo.username;
+        await updateProfile(newName, newUsername);
+
+        // Clear fields and close edit mode on success
+        setEditingField(null);
+        setEditValue('');
+      }
+    } catch (error) {
+      // Error handling is done in AppContext, but keep fields open so user can retry
+      console.error('Error updating user info:', error);
+      // Don't close edit mode on error, let user fix the issue
+    }
+  };
+
+  const handleCancel = () => {
     setEditingField(null);
-    toast.success('Information updated successfully!');
-    // TODO: Add API call to update user info on backend
+    setCurrentPassword('');
+    setNewPassword('');
   };
-
-  const handleCancel = () => setEditingField(null);
 
   if (isLoading) {
     return (
@@ -82,7 +103,7 @@ function UserInfo() {
             </div>
 
             <div className="info-section">
-              {/* username */}
+              {/* Username */}
               <div className="info-row">
                 <div className="info-label">Username:</div>
                 <div className="info-content">
@@ -96,20 +117,26 @@ function UserInfo() {
                             autoFocus
                         />
                         <div className="edit-buttons">
-                          <button onClick={() => handleSave('username')} className="save-btn">Save</button>
-                          <button onClick={handleCancel} className="cancel-btn">Cancel</button>
+                          <button onClick={() => handleSave('username')} className="save-btn">
+                            Save
+                          </button>
+                          <button onClick={handleCancel} className="cancel-btn">
+                            Cancel
+                          </button>
                         </div>
                       </div>
                   ) : (
                       <>
                         <span className="info-value">{userInfo.username}</span>
-                        <button onClick={() => handleEditClick('username')} className="change-btn">Change</button>
+                        <button onClick={() => handleEditClick('username')} className="change-btn">
+                          Change
+                        </button>
                       </>
                   )}
                 </div>
               </div>
 
-              {/* name */}
+              {/* Name */}
               <div className="info-row">
                 <div className="info-label">Name:</div>
                 <div className="info-content">
@@ -123,44 +150,34 @@ function UserInfo() {
                             autoFocus
                         />
                         <div className="edit-buttons">
-                          <button onClick={() => handleSave('name')} className="save-btn">Save</button>
-                          <button onClick={handleCancel} className="cancel-btn">Cancel</button>
+                          <button onClick={() => handleSave('name')} className="save-btn">
+                            Save
+                          </button>
+                          <button onClick={handleCancel} className="cancel-btn">
+                            Cancel
+                          </button>
                         </div>
                       </div>
                   ) : (
                       <>
                         <span className="info-value">{userInfo.name}</span>
-                        <button onClick={() => handleEditClick('name')} className="change-btn">Change</button>
+                        <button onClick={() => handleEditClick('name')} className="change-btn">
+                          Change
+                        </button>
                       </>
                   )}
                 </div>
               </div>
 
-              {/* email */}
+              {/* Email */}
               <div className="info-row email-row">
                 <div className="info-label">Email:</div>
                 <div className="info-content">
-                  {editingField === 'email' ? (
-                      <div className="edit-mode">
-                        <input
-                            type="email"
-                            value={editValue}
-                            onChange={(e) => setEditValue(e.target.value)}
-                            className="edit-input email-input"
-                            autoFocus
-                        />
-                        <div className="edit-buttons">
-                          <button onClick={() => handleSave('email')} className="save-btn">Save</button>
-                          <button onClick={handleCancel} className="cancel-btn">Cancel</button>
-                        </div>
-                      </div>
-                  ) : (
-                      <span className="info-value email-field">{userInfo.email}</span>
-                  )}
+                  <span className="info-value email-field">{userInfo.email}</span>
                 </div>
               </div>
 
-              {/* password */}
+              {/* Password */}
               <div className="info-row">
                 <div className="info-label">Password:</div>
                 <div className="info-content">
@@ -168,20 +185,35 @@ function UserInfo() {
                       <div className="edit-mode">
                         <input
                             type="password"
-                            value={editValue}
-                            onChange={(e) => setEditValue(e.target.value)}
+                            value={currentPassword}
+                            onChange={(e) => setCurrentPassword(e.target.value)}
+                            placeholder="Current password"
                             className="edit-input"
                             autoFocus
                         />
+                        <input
+                            type="password"
+                            value={newPassword}
+                            onChange={(e) => setNewPassword(e.target.value)}
+                            placeholder="New password"
+                            className="edit-input"
+                            style={{ marginTop: '8px' }}
+                        />
                         <div className="edit-buttons">
-                          <button onClick={() => handleSave('password')} className="save-btn">Save</button>
-                          <button onClick={handleCancel} className="cancel-btn">Cancel</button>
+                          <button onClick={() => handleSave('password')} className="save-btn">
+                            Save
+                          </button>
+                          <button onClick={handleCancel} className="cancel-btn">
+                            Cancel
+                          </button>
                         </div>
                       </div>
                   ) : (
                       <>
                         <span className="info-value">{userInfo.password}</span>
-                        <button onClick={() => handleEditClick('password')} className="change-btn">Change</button>
+                        <button onClick={() => handleEditClick('password')} className="change-btn">
+                          Change
+                        </button>
                       </>
                   )}
                 </div>

@@ -15,7 +15,7 @@ const FolderDetails = () => {
     deleteCard,
   } = useApp();
 
-  const folder = folders.find(f => f.id === folderId);
+  const folder = folders.find(f => f.id === parseInt(folderId));
 
   if (!folder) {
     return (
@@ -50,58 +50,73 @@ const FolderDetails = () => {
   };
 
   return (
-      <div className="folder-details-container">
-        <div className="folder-details-header">
-          <button onClick={() => navigate('/app/folders')} className="back-button">
-            ← Back
-          </button>
-          <div className="folder-details-title">
-            <Folder size={24} color="#667eea" />
-            <h2>{folder.name}</h2>
+      <div className="folder-details-page">
+        <div className="folder-details-card">
+
+          {/* Header */}
+          <div className="folder-details-header">
+            <div className="folder-details-title">
+              <Folder size={22} />
+              <h2>{folder.name}</h2>
+            </div>
           </div>
-        </div>
 
-        <div className="folder-stats">
-          <p>{folder.cards?.length || 0} flashcards</p>
-          <button onClick={handleCreateCard} className="btn btn-primary">
-            <Plus size={16} /> Add Flashcard
-          </button>
-        </div>
+          {/* Content */}
+          {!folder.cards || folder.cards.length === 0 ? (
+              <div className="empty-state">
+                <p>No flashcards yet. Click “Add Flashcard” to create your first one.</p>
+              </div>
+          ) : (
+              <div className="cards-list">
+                {folder.cards.map((card, index) => (
+                    <div key={card.id} className="card-row">
+                      <div className="card-name">Card {index + 1}</div>
+                      <div className="card-date">{card.date}</div>
+                      <div className="card-actions">
+                        <button
+                            onClick={() => handleEditCard(card)}
+                            className="btn btn-edit"
+                        >
+                          Edit
+                        </button>
+                        <button
+                            onClick={() => handleDeleteCard(card)}
+                            className="btn btn-delete"
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    </div>
+                ))}
+              </div>
+          )}
 
-        {!folder.cards || folder.cards.length === 0 ? (
-            <div className="empty-state-large">
-              <p>No flashcards yet</p>
-              <button onClick={handleCreateCard} className="btn btn-primary">
-                Create Your First Flashcard
+          {/* Footer */}
+          <div className="folder-details-footer">
+            <button
+                onClick={() => navigate('/app/folders')}
+                className="btn btn-outline"
+            >
+              ← Back
+            </button>
+
+            <div className="footer-right">
+          <span className="card-count">
+            {folder.cards?.length || 0} flashcards
+          </span>
+              <button
+                  onClick={handleCreateCard}
+                  className="btn btn-primary"
+              >
+                <Plus size={16} /> Add Flashcard
               </button>
             </div>
-        ) : (
-            <div className="cards-list">
-              {folder.cards.map((card, index) => (
-                  <div key={card.id} className="card-item">
-                    <div className="card-number">#{index + 1}</div>
-                    <div className="card-content">
-                      <div className="card-question">
-                        <strong>Q:</strong> {card.question}
-                      </div>
-                      <div className="card-answer">
-                        <strong>A:</strong> {card.answer}
-                      </div>
-                    </div>
-                    <div className="card-actions">
-                      <button onClick={() => handleEditCard(card)} className="btn btn-secondary">
-                        Edit
-                      </button>
-                      <button onClick={() => handleDeleteCard(card)} className="btn btn-danger">
-                        Delete
-                      </button>
-                    </div>
-                  </div>
-              ))}
-            </div>
-        )}
+          </div>
+
+        </div>
       </div>
   );
+
 };
 
 export default FolderDetails;

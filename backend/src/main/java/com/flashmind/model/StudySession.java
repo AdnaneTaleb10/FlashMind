@@ -6,6 +6,7 @@ public class StudySession {
     private Integer id;
     private Integer userId;
     private Integer folderId;
+    private Integer score;
     private LocalDateTime date;
 
     // Constructors
@@ -43,6 +44,10 @@ public class StudySession {
     public void setFolderId(Integer folderId) {
         this.folderId = folderId;
     }
+
+    public Integer getScore() { return score; }
+
+    public void setScore(Integer score) { this.score = score; }
 
     public LocalDateTime getDate() {
         return date;

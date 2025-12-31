@@ -6,10 +6,6 @@ if(!API_BASE_URL){
     throw new Error('VITE_API_URL is not defined in .env file');
 }
 
-if (import.meta.env.DEV) {
-    console.log('API Base URL:', API_BASE_URL);
-}
-
 // Get all folders
 export const getAllFolders = async () => {
     try {

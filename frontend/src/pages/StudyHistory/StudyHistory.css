@@ -1,25 +1,25 @@
 .history-container {
   max-width: 800px;
   margin: 0 auto;
-  padding: 40px 20px;
+  padding: clamp(2rem, 5vw, 3rem) 1.25rem;
 }
 
 .history-card {
   background: white;
   border: 2px solid #3b82f6;
   border-radius: 12px;
-  padding: 30px;
+  padding: clamp(1.5rem, 4vw, 2.5rem);
   position: relative;
 }
 
 .close-button {
   position: absolute;
-  top: 20px;
-  right: 20px;
+  top: 1.25rem;
+  right: 1.25rem;
   background: none;
   border: none;
   cursor: pointer;
-  padding: 5px;
+  padding: 0.5rem;
   transition: opacity 0.2s;
 }
 
@@ -30,47 +30,51 @@
 .history-title {
   text-align: center;
   color: #1f2937;
-  font-size: 22px;
+  font-size: clamp(1.25rem, 3vw, 1.5rem);
   font-weight: 600;
-  margin-bottom: 30px;
+  margin-bottom: 2rem;
 }
 
 .history-table-header {
-  display: flex;
-  justify-content: space-between;
-  padding: 15px 0;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 0;
   border-bottom: 2px solid #3b82f6;
-  margin-bottom: 10px;
+  margin-bottom: 1rem;
 }
 
 .header-folder {
-  flex: 1;
-  font-size: 14px;
+  font-size: 0.875rem;
   font-weight: 600;
   color: #3b82f6;
+  text-align: left;
 }
 
 .header-percentage {
-  font-size: 14px;
+  font-size: 0.875rem;
   font-weight: 600;
   color: #3b82f6;
-  min-width: 100px;
   text-align: center;
+  justify-self: center;
 }
 
 .header-revision {
-  font-size: 14px;
+  font-size: 0.875rem;
   font-weight: 600;
   color: #3b82f6;
-  min-width: 130px;
   text-align: right;
+  justify-self: end;
 }
 
+/* Items - same grid layout for perfect vertical alignment */
 .history-item {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  justify-content: space-between;
-  padding: 12px 0;
+  gap: 1rem;
+  padding: 1rem 0;
   border-bottom: 1px solid #e5e7eb;
 }
 
@@ -78,50 +82,60 @@
   border-bottom: none;
 }
 
+/* Left: Folder + dot */
 .history-folder {
   display: flex;
   align-items: center;
-  gap: 12px;
-  flex: 1;
+  gap: 0.75rem;
+  min-width: 0; /* Allows truncation */
+  justify-self: start;
+}
+
+/* Center: Percentage - now truly centered */
+.history-percentage {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1f2937;
+  text-align: center;
+  justify-self: center;
+  min-width: 4rem;
+}
+
+/* Right: Time */
+.history-time {
+  font-size: 0.875rem;
+  color: #6b7280;
+  text-align: right;
+  justify-self: end;
+  white-space: nowrap;
 }
 
 .history-dot {
   width: 12px;
   height: 12px;
   border-radius: 50%;
+  flex-shrink: 0;
 }
 
 .history-subject {
-  font-size: 15px;
+  font-size: 0.9375rem;
   color: #1f2937;
   font-weight: 500;
-}
-
-.history-percentage {
-  font-size: 15px;
-  color: #1f2937;
-  font-weight: 600;
-  min-width: 100px;
-  text-align: center;
-}
-
-.history-time {
-  font-size: 14px;
-  color: #6b7280;
-  min-width: 130px;
-  text-align: right;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .history-footer {
   text-align: center;
-  margin-top: 25px;
+  margin-top: 2rem;
 }
 
 .btn {
   border: none;
   border-radius: 6px;
-  padding: 10px 24px;
-  font-size: 14px;
+  padding: 0.625rem 1.5rem;
+  font-size: 0.875rem;
   cursor: pointer;
   font-weight: 500;
   transition: all 0.2s;
@@ -140,7 +154,41 @@
 
 .empty-state {
   text-align: center;
-  padding: 40px 20px;
+  padding: 3rem 1.25rem;
   color: #6b7280;
-  font-size: 15px;
+  font-size: 0.9375rem;
+}
+
+/* Responsive: Stack on small screens */
+@media (max-width: 600px) {
+  .history-table-header,
+  .history-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+    text-align: left;
+  }
+
+  .history-percentage {
+    align-self: center;
+    text-align: center;
+  }
+
+  .history-time {
+    align-self: flex-end;
+    text-align: right;
+  }
+
+  .header-percentage,
+  .header-revision {
+    align-self: flex-start;
+  }
+
+  .header-percentage {
+    align-self: center;
+  }
+
+  .header-revision {
+    align-self: flex-end;
+  }
 }

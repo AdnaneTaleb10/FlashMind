@@ -1,99 +1,143 @@
+/* ---------- Container ---------- */
+
 .folder-view-container {
-  max-width: 900px;
+  max-width: 60rem;
   margin: 0 auto;
-  padding: 40px 20px;
+  padding: clamp(2rem, 5vw, 3rem) clamp(1rem, 4vw, 2rem);
 }
 
-.folder-view-card {
-  background: white;
-  border: 2px solid #1f2937;
-  border-radius: 12px;
-  padding: 30px;
-}
+/* ---------- Header ---------- */
 
 .folder-view-header {
   display: flex;
   align-items: center;
-  gap: 12px;
-  margin-bottom: 30px;
-  justify-content: center;
+  justify-content: space-between;
+  margin-bottom: clamp(2rem, 4vw, 2.5rem);
+  gap: clamp(1rem, 3vw, 1.5rem);
+}
+
+.back-button {
+  font-size: clamp(0.9rem, 2.5vw, 1rem);
+  font-weight: 500;
+  color: #3b82f6;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: clamp(0.5rem, 2vw, 0.75rem) clamp(0.75rem, 3vw, 1rem);
+  border-radius: 0.5rem;
+  transition: all 0.2s ease;
+}
+
+.back-button:hover {
+  background: #eff6ff;
+  color: #2563eb;
 }
 
 .folder-view-title {
-  color: #1f2937;
-  font-size: 20px;
+  color: #111827;
+  font-size: clamp(1.5rem, 3.5vw, 2rem);
   font-weight: 600;
   margin: 0;
 }
 
+/* ---------- Folders Card Container ---------- */
+
+.folders-card {
+  background: #ffffff;
+  border: 0.09rem solid #e5e7eb;
+  border-radius: 1rem;
+  padding: clamp(1.5rem, 3vw, 2rem);
+}
+
+/* ---------- Folders List ---------- */
+
 .folders-list {
   display: flex;
   flex-direction: column;
+  gap: 0;
 }
+
+/* ---------- Folder Row ---------- */
 
 .folder-row {
-  display: flex;
+  display: grid;
+  grid-template-columns: auto 1fr auto auto auto auto;
   align-items: center;
-  justify-content: space-between;
-  padding: 15px 0;
-  border-bottom: 1px solid #e5e7eb;
+  gap: clamp(1rem, 3vw, 1.5rem);
+  padding: clamp(1rem, 2.5vw, 1.25rem) 0;
+  border-bottom: 0.09rem solid #f3f4f6;
+  transition: background 0.2s ease;
 }
 
-.folder-row.no-border {
+.folder-row:last-child {
   border-bottom: none;
+}
+
+.folder-row:hover {
+  background: #f9fafb;
+  margin: 0 calc(-1 * clamp(1rem, 2.5vw, 1.25rem));
+  padding-left: clamp(1rem, 2.5vw, 1.25rem);
+  padding-right: clamp(1rem, 2.5vw, 1.25rem);
+  border-radius: 0.5rem;
 }
 
 .folder-info-clickable {
   display: flex;
   align-items: center;
-  gap: 12px;
-  flex: 1;
+  gap: clamp(0.75rem, 2vw, 1rem);
   cursor: pointer;
-  padding: 5px 8px;
-  margin: -5px -8px;
-  border-radius: 6px;
-  transition: background 0.2s;
-}
-
-.folder-info-clickable:hover {
-  background: #f3f4f6;
+  min-width: 0;
 }
 
 .folder-name {
-  font-size: 15px;
-  color: #1f2937;
-  font-weight: 500;
+  font-size: clamp(1rem, 2.5vw, 1.1rem);
+  color: #111827;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
+
+.folder-card-info {
+  font-size: clamp(0.85rem, 2.5vw, 0.95rem);
+  color: #6b7280;
+  font-weight: 500;
+  white-space: nowrap;
+  justify-self: start;
+}
+
+/* ---------- Folder Actions ---------- */
 
 .folder-actions {
   display: flex;
-  align-items: center;
-  gap: 15px;
+  gap: clamp(0.5rem, 2vw, 0.75rem);
+  justify-self: end;
 }
 
-.folder-date {
-  font-size: 14px;
-  color: #6b7280;
-  min-width: 100px;
-}
+/* ---------- Buttons ---------- */
 
 .btn {
   border: none;
-  border-radius: 6px;
-  padding: 8px 20px;
-  font-size: 14px;
+  border-radius: 0.5rem;
+  padding: clamp(0.45rem, 2vw, 0.55rem) clamp(1rem, 3vw, 1.25rem);
+  font-size: clamp(0.85rem, 2.5vw, 0.9rem);
   cursor: pointer;
   font-weight: 500;
-  transition: all 0.2s;
+  transition: all 0.2s ease;
+  white-space: nowrap;
 }
 
-.btn:hover:not(.btn-disabled) {
-  transform: translateY(-1px);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+.btn:hover:not(:disabled) {
+  transform: translateY(-0.0625rem);
+  box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.15);
 }
 
-.btn:active:not(.btn-disabled) {
+.btn:active:not(:disabled) {
   transform: translateY(0);
+}
+
+.btn:disabled {
+  cursor: not-allowed;
 }
 
 .btn-primary {
@@ -101,8 +145,18 @@
   color: white;
 }
 
-.btn-primary:hover:not(.btn-disabled) {
+.btn-primary:hover:not(:disabled) {
   background: #2563eb;
+}
+
+.btn-secondary {
+  background: white;
+  color: #3b82f6;
+  border: 0.125rem solid #3b82f6;
+}
+
+.btn-secondary:hover {
+  background: #eff6ff;
 }
 
 .btn-danger {
@@ -114,40 +168,76 @@
   background: #dc2626;
 }
 
-.btn-secondary {
-  background: white;
-  color: #3b82f6;
-  border: 2px solid #3b82f6;
-}
+/* ---------- Empty State ---------- */
 
-.btn-secondary:hover {
-  background: #eff6ff;
-}
-
-.btn-disabled {
-  opacity: 0.5;
-  cursor: not-allowed !important;
-}
-
-.btn-disabled:hover {
-  transform: none !important;
-  box-shadow: none !important;
-  background: #3b82f6 !important;
-}
-
-.folder-view-footer {
-  display: flex;
-  justify-content: flex-start;
-  margin-top: 25px;
-}
-
-.folder-view-footer .btn {
-  padding: 10px 24px;
-}
-
-.empty-state {
+.empty-state-large {
   text-align: center;
-  padding: 40px 20px;
+  padding: clamp(3rem, 8vw, 5rem) clamp(1rem, 4vw, 2rem);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(1rem, 3vw, 1.5rem);
+  background: #f9fafb;
+  border: 0.125rem dashed #d1d5db;
+  border-radius: 1rem;
+}
+
+.empty-state-large p {
+  font-size: clamp(1rem, 2.5vw, 1.125rem);
   color: #6b7280;
-  font-size: 15px;
+  margin: 0;
+  font-weight: 500;
+}
+
+/* ---------- Mobile Optimization ---------- */
+
+@media (max-width: 48rem) {
+  .folder-view-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .back-button {
+    align-self: flex-start;
+  }
+
+  .folder-row {
+    grid-template-columns: 1fr;
+    gap: clamp(0.75rem, 2vw, 1rem);
+    padding: clamp(1.25rem, 3vw, 1.5rem) clamp(1rem, 2.5vw, 1.25rem);
+  }
+
+  .folder-row:hover {
+    margin: 0;
+    padding: clamp(1.25rem, 3vw, 1.5rem) clamp(1rem, 2.5vw, 1.25rem);
+  }
+
+  .folder-info-clickable {
+    order: 1;
+  }
+
+  .folder-card-info {
+    order: 2;
+    justify-self: start;
+  }
+
+  .folder-actions {
+    order: 3;
+    justify-self: stretch;
+    width: 100%;
+  }
+
+  .folder-actions .btn {
+    flex: 1;
+  }
+}
+
+@media (max-width: 30rem) {
+  .folder-actions {
+    flex-direction: column;
+  }
+
+  .folder-actions .btn {
+    width: 100%;
+  }
 }

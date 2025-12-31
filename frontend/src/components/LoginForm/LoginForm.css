@@ -34,8 +34,7 @@
 .eye-button-login {
   position: absolute;
   right: 15px;
-  top: 50%;
-  transform: translateY(-50%);
+  top: 20%;
   background: none;
   border: none;
   padding: 0;

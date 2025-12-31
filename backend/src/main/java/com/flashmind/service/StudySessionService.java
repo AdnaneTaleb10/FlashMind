@@ -65,6 +65,8 @@ public class StudySessionService {
         StudySession session = studySessionDao.findById(sessionId)
                 .orElseThrow(() -> new IllegalArgumentException("Study session not found with id: " + sessionId));
 
+        studySessionDao.updateScore(sessionId, score);
+
         // Get total cards in session
         int totalCards = flashCardDao.countByFolderId(session.getFolderId());
 
