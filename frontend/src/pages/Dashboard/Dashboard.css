@@ -64,6 +64,13 @@
   margin-bottom: 25px;
 }
 
+.empty-state {
+  text-align: center;
+  padding: 40px 20px;
+  color: #6b7280;
+  font-size: 15px;
+}
+
 .folder-item {
   display: flex;
   align-items: center;
@@ -81,6 +88,14 @@
   align-items: center;
   gap: 12px;
   flex: 1;
+  padding: 5px 8px;
+  margin: -5px -8px;
+  border-radius: 6px;
+  transition: background 0.2s;
+}
+
+.folder-info:hover {
+  background: #f3f4f6;
 }
 
 .folder-name {
@@ -108,16 +123,25 @@
   font-size: 14px;
   cursor: pointer;
   font-weight: 500;
-  transition: opacity 0.2s;
+  transition: all 0.2s;
 }
 
 .btn:hover {
-  opacity: 0.9;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.btn:active {
+  transform: translateY(0);
 }
 
 .btn-primary {
   background: #3b82f6;
   color: white;
+}
+
+.btn-primary:hover {
+  background: #2563eb;
 }
 
 .section-footer {

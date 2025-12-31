@@ -1,17 +1,7 @@
 import { Folder } from 'lucide-react';
 import './FolderView.css';
 
-const FolderView = ({ onNavigate }) => {
-  const folders = [
-    { id: 1, name: 'Math', date: '2025/11/24' },
-    { id: 2, name: 'History', date: '2025/11/24' },
-    { id: 3, name: 'Science', date: '2025/11/24' }
-  ];
-
-  const handleFolderClick = (folder) => {
-    onNavigate('folderDetails', folder);
-  };
-
+const FolderView = ({ folders, onNavigate, onEdit, onDelete, onStartStudy }) => {
   return (
     <div className="folder-view-container">
       <div className="folder-view-card">
@@ -20,35 +10,60 @@ const FolderView = ({ onNavigate }) => {
           <h3 className="folder-view-title">Your Folders</h3>
         </div>
 
-        <div className="folders-list">
-          {folders.map((folder, index) => (
-            <div 
-              key={folder.id} 
-              className={`folder-row ${index === folders.length - 1 ? 'no-border' : ''}`}
-            >
-              <div 
-                className="folder-info-clickable"
-                onClick={() => handleFolderClick(folder)}
-              >
-                <Folder size={20} color="#6b7280" />
-                <span className="folder-name">{folder.name}</span>
-              </div>
-              
-              <div className="folder-actions">
-                <span className="folder-date">{folder.date}</span>
+        {folders.length === 0 ? (
+          <div className="empty-state">
+            No folders yet. Create one to get started!
+          </div>
+        ) : (
+          <div className="folders-list">
+            {folders.map((folder, index) => (
+              <div key={folder.id} className={`folder-row ${index === folders.length - 1 ? 'no-border' : ''}`}>
+                <div 
+                  className="folder-info-clickable"
+                  onClick={() => onNavigate('folderDetails', folder)}
+                >
+                  <Folder size={20} color="#6b7280" />
+                  <span className="folder-name">{folder.name}</span>
+                </div>
                 
-                <button className="btn btn-primary">Edit</button>
-                
-                <button className="btn btn-danger">Delete</button>
+                <div className="folder-actions">
+                  <span className="folder-date">{folder.date}</span>
+                  
+                  <button 
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onStartStudy(folder);
+                    }}
+                    disabled={folder.cards.length === 0}
+                    className={`btn btn-primary ${folder.cards.length === 0 ? 'btn-disabled' : ''}`}>
+                    Study
+                  </button>
+                  
+                  <button 
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onEdit(folder);
+                    }}
+                    className="btn btn-primary">
+                    Edit
+                  </button>
+                  
+                  <button 
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onDelete(folder);
+                    }}
+                    className="btn btn-danger">
+                    Delete
+                  </button>
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
 
         <div className="folder-view-footer">
-          <button 
-            onClick={() => onNavigate('dashboard')}
-            className="btn btn-secondary">
+          <button onClick={() => onNavigate('dashboard')} className="btn btn-secondary">
             ← Back
           </button>
         </div>

@@ -1,33 +1,68 @@
+import { useState } from 'react';
 import { X } from 'lucide-react';
 import './StudyAnswer.css';
 
-const StudyAnswer = ({ onNavigate, folder }) => {
+const StudyAnswer = ({ onNavigate, folder, card, onAnswer, onNext, cardNumber, totalCards }) => {
+  const [selectedAnswer, setSelectedAnswer] = useState(null);
+
+  const handleCorrect = () => {
+    if (selectedAnswer === null) {
+      setSelectedAnswer('correct');
+      onAnswer(true);
+    }
+  };
+
+  const handleWrong = () => {
+    if (selectedAnswer === null) {
+      setSelectedAnswer('wrong');
+      onAnswer(false);
+    }
+  };
+
+  const handleNext = () => {
+    if (selectedAnswer !== null) {
+      onNext();
+    }
+  };
+
   return (
     <div className="answer-container">
       <div className="answer-card">
-        <button 
-          onClick={() => onNavigate('dashboard')}
-          className="close-button">
+        <button onClick={() => onNavigate('dashboard')} className="close-button">
           <X size={24} color="#1f2937" />
         </button>
 
-        <h3 className="answer-header">Studying {folder?.name || 'French'}</h3>
+        <h3 className="answer-header">
+          Studying {folder?.name || 'Folder'} ({cardNumber}/{totalCards})
+        </h3>
 
         <div className="answer-content">
-          "Bonjour" means "Good Morning"
+          {card?.answer || 'Answer'}
         </div>
 
         <div className="answer-actions">
           <button 
-            onClick={() => onNavigate('sessionResults')}
-            className="btn btn-primary btn-large">
+            onClick={handleNext}
+            disabled={selectedAnswer === null}
+            className={`btn btn-primary btn-large ${selectedAnswer === null ? 'btn-disabled' : ''}`}>
             Next Card
           </button>
         </div>
 
         <div className="answer-buttons">
-          <button className="btn btn-success">Correct ✓</button>
-          <button className="btn btn-error">Wrong ✕</button>
+          <button 
+            onClick={handleCorrect}
+            disabled={selectedAnswer !== null}
+            className={`btn btn-success ${selectedAnswer === 'correct' ? 'btn-selected' : ''} ${selectedAnswer !== null && selectedAnswer !== 'correct' ? 'btn-disabled' : ''}`}>
+            Correct ✓
+          </button>
+          
+          <button 
+            onClick={handleWrong}
+            disabled={selectedAnswer !== null}
+            className={`btn btn-error ${selectedAnswer === 'wrong' ? 'btn-selected' : ''} ${selectedAnswer !== null && selectedAnswer !== 'wrong' ? 'btn-disabled' : ''}`}>
+            Wrong ✕
+          </button>
         </div>
       </div>
     </div>

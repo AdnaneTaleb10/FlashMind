@@ -1,5 +1,5 @@
 .folder-view-container {
-  max-width: 600px;
+  max-width: 900px;
   margin: 0 auto;
   padding: 40px 20px;
 }
@@ -87,12 +87,12 @@
   transition: all 0.2s;
 }
 
-.btn:hover {
+.btn:hover:not(.btn-disabled) {
   transform: translateY(-1px);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
-.btn:active {
+.btn:active:not(.btn-disabled) {
   transform: translateY(0);
 }
 
@@ -101,7 +101,7 @@
   color: white;
 }
 
-.btn-primary:hover {
+.btn-primary:hover:not(.btn-disabled) {
   background: #2563eb;
 }
 
@@ -124,6 +124,17 @@
   background: #eff6ff;
 }
 
+.btn-disabled {
+  opacity: 0.5;
+  cursor: not-allowed !important;
+}
+
+.btn-disabled:hover {
+  transform: none !important;
+  box-shadow: none !important;
+  background: #3b82f6 !important;
+}
+
 .folder-view-footer {
   display: flex;
   justify-content: flex-start;
@@ -132,4 +143,11 @@
 
 .folder-view-footer .btn {
   padding: 10px 24px;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 40px 20px;
+  color: #6b7280;
+  font-size: 15px;
 }

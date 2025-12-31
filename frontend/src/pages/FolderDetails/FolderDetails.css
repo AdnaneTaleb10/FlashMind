@@ -82,10 +82,6 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
-.btn:active {
-  transform: translateY(0);
-}
-
 .btn-primary {
   background: #3b82f6;
   color: white;
@@ -122,4 +118,11 @@
 
 .folder-details-footer .btn {
   padding: 10px 24px;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 40px 20px;
+  color: #6b7280;
+  font-size: 15px;
 }

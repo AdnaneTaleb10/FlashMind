@@ -1,20 +1,20 @@
 
 import { useState } from 'react';
 import { X } from 'lucide-react';
-import './CreateFlashcardModal.css';
+import './EditCardModal.css';
 
-const CreateFlashcardModal = ({ onClose, onCreate }) => {
-  const [question, setQuestion] = useState('');
-  const [answer, setAnswer] = useState('');
+const EditCardModal = ({ card, onSave, onClose }) => {
+  const [question, setQuestion] = useState(card.question);
+  const [answer, setAnswer] = useState(card.answer);
 
-  const handleCreate = () => {
+  const handleSave = () => {
     if (question.trim() && answer.trim()) {
-      onCreate(question.trim(), answer.trim());
+      onSave({ ...card, question: question.trim(), answer: answer.trim() });
       onClose();
     }
   };
 
-  const isValid = question.trim().length > 0 && answer.trim().length > 0;
+  const isValid = question.trim() && answer.trim();
 
   return (
     <div className="modal-overlay" onClick={onClose}>
@@ -23,7 +23,7 @@ const CreateFlashcardModal = ({ onClose, onCreate }) => {
           <X size={20} color="#1f2937" />
         </button>
 
-        <h3 className="modal-title">Create New Flash Card</h3>
+        <h3 className="modal-title">Edit Flash Card</h3>
 
         <div className="modal-form">
           <div className="form-group">
@@ -56,10 +56,10 @@ const CreateFlashcardModal = ({ onClose, onCreate }) => {
           </button>
           
           <button 
-            onClick={handleCreate}
+            onClick={handleSave}
             disabled={!isValid}
             className={`btn btn-primary ${!isValid ? 'btn-disabled' : ''}`}>
-            Create FlashCard
+            Save
           </button>
         </div>
       </div>
@@ -67,4 +67,4 @@ const CreateFlashcardModal = ({ onClose, onCreate }) => {
   );
 };
 
-export default CreateFlashcardModal;
+export default EditCardModal;

@@ -1,18 +1,19 @@
+
 import { useState } from 'react';
 import { X } from 'lucide-react';
-import './CreateFolderModal.css';
+import './EditFolderModal.css';
 
-const CreateFolderModal = ({ onClose, onCreate }) => {
-  const [folderName, setFolderName] = useState('');
+const EditFolderModal = ({ folder, onSave, onClose }) => {
+  const [name, setName] = useState(folder.name);
 
-  const handleCreate = () => {
-    if (folderName.trim()) {
-      onCreate(folderName.trim());
+  const handleSave = () => {
+    if (name.trim()) {
+      onSave({ ...folder, name: name.trim() });
       onClose();
     }
   };
 
-  const isValid = folderName.trim().length > 0;
+  const isValid = name.trim().length > 0;
 
   return (
     <div className="modal-overlay" onClick={onClose}>
@@ -21,17 +22,16 @@ const CreateFolderModal = ({ onClose, onCreate }) => {
           <X size={20} color="#1f2937" />
         </button>
 
-        <h3 className="modal-title">Create New Folder</h3>
+        <h3 className="modal-title">Edit Folder</h3>
 
         <div className="modal-form">
           <label className="modal-label">Folder Name :</label>
           <input 
             type="text"
-            value={folderName}
-            onChange={(e) => setFolderName(e.target.value)}
+            value={name}
+            onChange={(e) => setName(e.target.value)}
             placeholder="folder's name"
             className="modal-input"
-            onKeyPress={(e) => e.key === 'Enter' && isValid && handleCreate()}
             autoFocus
           />
         </div>
@@ -42,10 +42,10 @@ const CreateFolderModal = ({ onClose, onCreate }) => {
           </button>
           
           <button 
-            onClick={handleCreate}
+            onClick={handleSave}
             disabled={!isValid}
             className={`btn btn-primary ${!isValid ? 'btn-disabled' : ''}`}>
-            Create Folder
+            Save
           </button>
         </div>
       </div>
@@ -53,4 +53,4 @@ const CreateFolderModal = ({ onClose, onCreate }) => {
   );
 };
 
-export default CreateFolderModal;
+export default EditFolderModal;
